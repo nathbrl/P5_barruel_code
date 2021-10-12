@@ -14,8 +14,7 @@ function displaySofas(sofa) {
     //console.log(section);
 
     const card = document.createElement('a');
-    card.id = sofa._id;
-    card.href = "product.html" + sofa._id;
+    card.href = "./product.html?id=" + sofa._id;
     console.log(card);
 
     const article = document.createElement('article');
