@@ -18,8 +18,8 @@ function getAllProducts() {
             displayImage(sofa);
             displayPrice(sofa);
             displayDescription(sofa);
-            displayColors(sofa);
             displayName(sofa);
+            createColorOption(sofa);
         });
 }
 getAllProducts();
@@ -52,25 +52,66 @@ function displayName(sofa) {
     //console.log(name);
 }
 
-function colorOption() {
-    const choice = document.querySelector('option');
-    //console.log(choice);
-    //choice.setAttribute('disabled', 'disabled');
-    choice.setAttribute('selected', 'true');
-    choice.setAttribute('value', 0);
-    //console.log(choice);
+function createColorOption(sofa) {
+    const optionText = document.createElement('option');
+    console.log(optionText);
+    const select = document.querySelector('select');
+    select.add(optionText)
+    //console.log(select);
+    optionText.setAttribute('disabled', 'disabled');
+    optionText.setAttribute('selected', 'true');
+    optionText.textContent = 'SVP choisissez une couleur';
+    const arrayColors = sofa.colors;
+    //console.log(arrayColors);
+    arrayColors.forEach((sofa) => {
+        const colorOption = document.createElement("option");
+        colorOption.setAttribute("value", sofa);
+        colorOption.textContent = sofa;
+        console.log(colorOption);
+        select.add(colorOption);
+    });
 }
-colorOption();
 
-function displayColors(sofa) {
-    const sofaColors = sofa.colors;
-    const option = document.querySelector('#colors');
-    //console.log(sofa.colors);
-    sofaColors.forEach((sofa) => {
-        const sofaColorOption = document.querySelector("option");
-        sofaColorOption.setAttribute("value", 1);
-        sofaColorOption.textContent = sofa;
-        console.log(sofaColorOption);
-        option.appendChild(sofaColorOption);
-    })
+/*function getSelectedValue() {
+    
 }
+getSelectedValue();*/
+
+/*function colorOption() {
+    const options = document.querySelectorAll('option');
+    console.log(options);
+    options.forEach((option) => {
+        option.addEventListener('click', (e) => {
+            console.log(e);
+            const selectedOptions = document.querySelectorAll('option');
+            console.log(selectedOptions);
+            const findSelectedColor = selectedOptions.find(element => element.getAttribute('selected', 'true'));
+            console.log(findSelectedColor);
+            console.log(selectedOptions);
+            e.currentTarget.setAttribute('selected', 'true');
+            console.log(e);
+        });
+    });
+}
+colorOption();*/
+
+
+
+
+
+
+
+
+
+
+
+/* get selected option
+const options = Array.from(select.options);
+options.forEach((option, i) => {
+  if (option.value === use_id) select.selectedIndex = i;
+}); */
+
+/*function selectElement(id, valueToSelect) {    
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}*/
