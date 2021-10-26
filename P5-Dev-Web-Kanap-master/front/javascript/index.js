@@ -1,7 +1,7 @@
 function getAllProducts() {
     fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
-        .then((sofas) => sofas.forEach((sofa, i) => {
+        .then((sofas) => sofas.forEach((sofa) => {
             //console.log(sofa);
             //console.log(i);
             displaySofas(sofa);
@@ -15,7 +15,7 @@ function displaySofas(sofa) {
 
     const card = document.createElement('a');
     card.href = "./product.html?id=" + sofa._id;
-    console.log(card);
+    //console.log(card);
 
     const article = document.createElement('article');
     //console.log(article);

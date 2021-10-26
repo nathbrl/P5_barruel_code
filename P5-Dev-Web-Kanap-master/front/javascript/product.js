@@ -54,10 +54,10 @@ function displayName(sofa) {
 
 function createColorOption(sofa) {
     const optionText = document.createElement('option');
-    console.log(optionText);
-    const select = document.querySelector('select');
+    //console.log(optionText);
+    const select = document.querySelector('select').options;
     select.add(optionText)
-    //console.log(select);
+    console.log(select);
     optionText.setAttribute('disabled', 'disabled');
     optionText.setAttribute('selected', 'true');
     optionText.textContent = 'SVP choisissez une couleur';
@@ -72,10 +72,10 @@ function createColorOption(sofa) {
     });
 }
 
-/*function getSelectedValue() {
+/*function getSelectedColor() {
     
 }
-getSelectedValue();*/
+getSelectedColor();*/
 
 /*function colorOption() {
     const options = document.querySelectorAll('option');
