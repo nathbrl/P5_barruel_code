@@ -20,7 +20,7 @@ function getProductUrl() {
 }
 getProductUrl();
 
-/*function productButtonId (sofa) {
+function productButtonId (sofa) {
     const addToCartButton = document.querySelectorAll('#addToCart');
     //console.log(addToCartButton);
     addToCartButton.forEach((button) => {
@@ -31,7 +31,7 @@ getProductUrl();
             console.log(getProduct);
         });
     });
-}*/
+}
 
 function storeProduct(sofa) {
     const addToCartButton = document.querySelectorAll("#addToCart");
@@ -42,12 +42,15 @@ function storeProduct(sofa) {
             const productId = getProductUrl();
             //console.log(productId);
             const getProduct = sofa.filter((sofa) => sofa._id == productId);
-            //console.log(getProduct);
+            console.log(getProduct);
+
             let cart = [];
-            cart = JSON.parse(localStorage.getItem("products", getProduct)) || [];
-            cart.push(getProduct);
+            const product = localStorage.productId + " " + localStorage.selectedColor + " " + localStorage.selectedQuantity;
+            //console.log(product);
+            cart = JSON.parse(localStorage.getItem("product")) || [];
+            cart.push(product);
             //console.log(cart);
-            localStorage.setItem("products", JSON.stringify(cart));
+            localStorage.setItem("product", JSON.stringify(cart));
         });
     });
 }
@@ -55,25 +58,26 @@ function storeProduct(sofa) {
 function displayCartItems() {
     let divProduct = document.querySelector("#cart__items");
     //console.log(divProduct);
-    let productQuantity = document.querySelector("input.itemQuantity");
-    //console.log(productQuantity);
-    let cartItems = localStorage.getItem("products");
+    let divTotal = document.querySelector('.cart__price');
+    //console.log(divTotal);
+    let cartItems = localStorage.getItem("product");
+    let cartCost = localStorage.getItem('totalCost');
     cartItems = JSON.parse(cartItems);
-    //console.log(cartItems);
+    console.log(cartItems);
 
     if (cartItems && divProduct) {
         divProduct.innerHTML = '';
         cartItems.forEach((product) => {
             divProduct.innerHTML += `
-            <article class="cart__item" data-id="${product[0]._id}">
+            <article class="cart__item" data-id=${product[0]._id}>
                 <div class="cart__item__img">
-                    <img src="${product[0].imageUrl}" alt="${product[0].altTxt}">
+                    <img src=${product[0].imageUrl} alt=${product[0].altTxt}>
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__titlePrice">
                         <h2>${product[0].name}</h2>
                         <p>${product[0].price}€</p>
-                        <p>${product[0].colors}</p>
+                        <p>couleur choisie</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
@@ -82,16 +86,22 @@ function displayCartItems() {
                             value="0">
                         </div>
                     </div>
-                    <div id="${product[0]._id}" class="cart__item__content__settings__delete">
+                    <div id=${product[0]._id} class="cart__item__content__settings__delete">
                         <p class="deleteItem">Supprimer</p>
                     </div>
                 </div>
             </article>`;
         });
+        divTotal.innerHTML += `
+            <p>Total <span id="totalQuantity"></span> 
+                articles: <span id="totalPrice">${cartCost/10}</span> €
+            </p>
+            </div>`
     }
 }
 
-function removeProduct() {
+
+/*function removeProduct() {
     const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete p');
     //console.log(suppressButton);
     suppressButton.forEach((button) => {
@@ -102,4 +112,4 @@ function removeProduct() {
         });
     });
 }
-removeProduct();
+removeProduct();*/

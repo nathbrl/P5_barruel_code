@@ -3,8 +3,8 @@ function getProductUrl() {
     //console.log(urlLoc);
     const url = new URL(urlLoc);
     //console.log(url);
-    const urlId = url.searchParams.get("id");
-    return urlId;
+    const productId = url.searchParams.get("id");
+    return productId;
 }
 getProductUrl();
 
@@ -38,6 +38,7 @@ function displayPrice(sofa) {
     price.innerHTML = sofa.price;
     //console.log(price);
 }
+
 function displayDescription(sofa) {
     const description = document.querySelector('#description');
     //console.log(description);
@@ -70,40 +71,31 @@ function createColorOption(sofa) {
         //console.log(colorOption);
         select.add(colorOption);
     });
-    colorOption();
+    getProductOptions();
 }
 
-function colorOption() {
+function getProductOptions() {
     const select = document.querySelector('#colors');
     //console.log(select);
+    const productId = getProductUrl();
+    //console.log(productId);
+    localStorage.setItem("productId", productId);
+    //console.log(localStorage.getItem('productId'));
     select.addEventListener('change', (e) => {
-        //console.log(e.target.value);
         const selectedColor = e.target.value;
         //console.log(selectedColor);
+        //console.log(e.target.value);
 
         localStorage.setItem("selectedColor", selectedColor);
         console.log(localStorage.getItem('selectedColor'));
     })
+    const quantity = document.querySelector('input#quantity');
+    //console.log(quantity);
+    quantity.addEventListener('change', (e) => {
+        //console.log(e);
+        const selectedQuantity = e.target.value;
+        //console.log(e.target.value);
+        localStorage.setItem("selectedQuantity", selectedQuantity);
+        console.log(localStorage.getItem('selectedQuantity'));
+    })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/* get selected option
-const options = Array.from(select.options);
-options.forEach((option, i) => {
-  if (option.value === use_id) select.selectedIndex = i;
-}); */
-
-/*function selectElement(id, valueToSelect) {    
-    let element = document.getElementById(id);
-    element.value = valueToSelect;
-}*/
