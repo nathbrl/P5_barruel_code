@@ -46,7 +46,7 @@ function storeProduct(sofa) {
             let cart = [];
             cart = JSON.parse(localStorage.getItem("products", getProduct)) || [];
             cart.push(getProduct);
-            console.log(cart);
+            //console.log(cart);
             localStorage.setItem("products", JSON.stringify(cart));
         });
     });
@@ -59,7 +59,7 @@ function displayCartItems() {
     //console.log(productQuantity);
     let cartItems = localStorage.getItem("products");
     cartItems = JSON.parse(cartItems);
-    console.log(cartItems);
+    //console.log(cartItems);
 
     if (cartItems && divProduct) {
         divProduct.innerHTML = '';
@@ -82,7 +82,7 @@ function displayCartItems() {
                             value="0">
                         </div>
                     </div>
-                    <div class="cart__item__content__settings__delete">
+                    <div id="${product[0]._id}" class="cart__item__content__settings__delete">
                         <p class="deleteItem">Supprimer</p>
                     </div>
                 </div>
@@ -93,7 +93,7 @@ function displayCartItems() {
 
 function removeProduct() {
     const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete p');
-    console.log(suppressButton);
+    //console.log(suppressButton);
     suppressButton.forEach((button) => {
         button.addEventListener('click', (e) => {
             console.log(e);

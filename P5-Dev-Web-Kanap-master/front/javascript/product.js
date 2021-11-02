@@ -57,7 +57,7 @@ function createColorOption(sofa) {
     //console.log(optionText);
     const select = document.querySelector('select').options;
     select.add(optionText)
-    console.log(select);
+    //console.log(select);
     optionText.setAttribute('disabled', 'disabled');
     optionText.setAttribute('selected', 'true');
     optionText.textContent = 'SVP choisissez une couleur';
@@ -67,33 +67,25 @@ function createColorOption(sofa) {
         const colorOption = document.createElement("option");
         colorOption.setAttribute("value", sofa);
         colorOption.textContent = sofa;
-        console.log(colorOption);
+        //console.log(colorOption);
         select.add(colorOption);
     });
+    colorOption();
 }
 
-/*function getSelectedColor() {
-    
-}
-getSelectedColor();*/
+function colorOption() {
+    const select = document.querySelector('#colors');
+    //console.log(select);
+    select.addEventListener('change', (e) => {
+        //console.log(e.target.value);
+        const selectedColor = e.target.value;
+        //console.log(selectedColor);
 
-/*function colorOption() {
-    const options = document.querySelectorAll('option');
-    console.log(options);
-    options.forEach((option) => {
-        option.addEventListener('click', (e) => {
-            console.log(e);
-            const selectedOptions = document.querySelectorAll('option');
-            console.log(selectedOptions);
-            const findSelectedColor = selectedOptions.find(element => element.getAttribute('selected', 'true'));
-            console.log(findSelectedColor);
-            console.log(selectedOptions);
-            e.currentTarget.setAttribute('selected', 'true');
-            console.log(e);
-        });
-    });
+        localStorage.setItem("selectedColor", selectedColor);
+        console.log(localStorage.getItem('selectedColor'));
+    })
 }
-colorOption();*/
+
 
 
 
