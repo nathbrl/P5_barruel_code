@@ -44,18 +44,55 @@ function storeProduct(sofa) {
             const getProduct = sofa.filter((sofa) => sofa._id == productId);
             console.log(getProduct);
 
-            let cart = [];
-            const product = localStorage.productId + " " + localStorage.selectedColor + " " + localStorage.selectedQuantity;
+            //const product = localStorage.productId + " " + localStorage.selectedColor + " " + localStorage.selectedQuantity;
+            const product = {
+                productId: localStorage.productId,
+                selectedColor: localStorage.selectedColor,
+                selectedQuantity: localStorage.selectedQuantity,
+            }
             //console.log(product);
-            cart = JSON.parse(localStorage.getItem("product")) || [];
+            
+            //console.log(product);
+            cart = JSON.parse(localStorage.getItem("products")) || [];
+            console.log(JSON.parse(localStorage.getItem("products")));
+            console.log(localStorage.getItem("products"));
             cart.push(product);
             //console.log(cart);
-            localStorage.setItem("product", JSON.stringify(cart));
+            localStorage.setItem("products", JSON.stringify(cart));
+            //console.log(cart);
         });
     });
 }
 
 function displayCartItems() {
+    //Récupérer l'array avec tous les prdt
+    // Itérer sur l'arr, log l'arr du prdt + log (stocker l'id du prd)
+    // 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let divProduct = document.querySelector("#cart__items");
     //console.log(divProduct);
     let divTotal = document.querySelector('.cart__price');
@@ -99,7 +136,18 @@ function displayCartItems() {
             </div>`
     }
 }
-
+const products = [
+    {
+        productId: "id",
+        selectedColor: "color",
+        selectedQuantity: 2,
+    },
+    {
+        productId: "id",
+        selectedColor: "color",
+        selectedQuantity: 2,
+    }
+]
 
 /*function removeProduct() {
     const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete p');
