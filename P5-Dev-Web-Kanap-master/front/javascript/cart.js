@@ -1,15 +1,3 @@
-function getAllProducts() {
-    fetch("http://localhost:3000/api/products")
-        .then((res) => res.json())
-        .then((sofa) => {
-            //console.log(sofa);
-            //console.log(i);
-            storeProduct(sofa);
-            displayCartItems();
-        });
-}
-getAllProducts();
-
 function getProductUrl() {
     const urlLoc = window.location.href;
     //console.log(urlLoc);
@@ -20,42 +8,35 @@ function getProductUrl() {
 }
 getProductUrl();
 
-function productButtonId (sofa) {
+function getAllProducts() {
+    fetch("http://localhost:3000/api/products/")
+        .then((res) => res.json())
+        .then((sofa) => sofa.forEach ((product) => {
+                //console.log(sofa);
+                displayCartItems(sofa);
+                storeProduct(sofa);
+                cartTotalCost(product);
+        }));
+}
+getAllProducts();
+
+function storeProduct(sofa) {
     const addToCartButton = document.querySelectorAll('#addToCart');
     //console.log(addToCartButton);
     addToCartButton.forEach((button) => {
         button.addEventListener('click', () => {
             const productId = getProductUrl();
-            console.log(productId);
-            const getProduct = sofa.filter(sofa => sofa._id == productId);
-            console.log(getProduct);
-        });
-    });
-}
-
-function storeProduct(sofa) {
-    const addToCartButton = document.querySelectorAll("#addToCart");
-    //console.log(addToCartButton);
-    addToCartButton.forEach((button) => {
-        button.addEventListener("click", () => {
-            //console.log(e);
-            const productId = getProductUrl();
             //console.log(productId);
-            const getProduct = sofa.filter((sofa) => sofa._id == productId);
-            console.log(getProduct);
+            const getProduct = sofa.filter(sofa => sofa._id == productId);
+            //console.log(getProduct);
 
-            //const product = localStorage.productId + " " + localStorage.selectedColor + " " + localStorage.selectedQuantity;
             const product = {
                 productId: localStorage.productId,
                 selectedColor: localStorage.selectedColor,
                 selectedQuantity: localStorage.selectedQuantity,
             }
             //console.log(product);
-            
-            //console.log(product);
             cart = JSON.parse(localStorage.getItem("products")) || [];
-            console.log(JSON.parse(localStorage.getItem("products")));
-            console.log(localStorage.getItem("products"));
             cart.push(product);
             //console.log(cart);
             localStorage.setItem("products", JSON.stringify(cart));
@@ -64,98 +45,74 @@ function storeProduct(sofa) {
     });
 }
 
-function displayCartItems() {
-    //Récupérer l'array avec tous les prdt
+function cartTotalCost(product) {
+    let cartCost = localStorage.getItem('totalCost');
+    //console.log(product);
+    if(cartCost != null) {
+        cartCost = parseInt(cartCost);
+        localStorage.setItem("totalCost", cartCost + product.price);
+    } else {
+        localStorage.setItem("totalCost", product.price);
+    }
+    const totalQuantity = document.querySelector('span#totalQuantity');
+    //console.log(totalQuantity);
+    //totalQuantity.innerHTML = '6';
+
+    const totalCart = document.querySelector('span#totalPrice');
+    //console.log(totalCart);
+    totalCart.innerHTML = cartCost;
+    //console.log(totalCart);
+}
+
+function displayCartItems(sofa) {
+    //Récupérer l'array avec tous les prdt // = cartItems
     // Itérer sur l'arr, log l'arr du prdt + log (stocker l'id du prd)
-    // 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     let divProduct = document.querySelector("#cart__items");
     //console.log(divProduct);
-    let divTotal = document.querySelector('.cart__price');
-    //console.log(divTotal);
-    let cartItems = localStorage.getItem("product");
-    let cartCost = localStorage.getItem('totalCost');
+    let cartItems = localStorage.getItem("products");
     cartItems = JSON.parse(cartItems);
-    console.log(cartItems);
+    let cartCost = localStorage.getItem('totalCost');
+    //console.log(cartItems);
 
     if (cartItems && divProduct) {
         divProduct.innerHTML = '';
-        cartItems.forEach((product) => {
+        cartItems.forEach((product, i) => {
+            //console.log(product);
             divProduct.innerHTML += `
-            <article class="cart__item" data-id=${product[0]._id}>
+            <article class="cart__item" data-id=${product.productId}>
                 <div class="cart__item__img">
-                    <img src=${product[0].imageUrl} alt=${product[0].altTxt}>
+                    <img src=${sofa[i].imageUrl} alt=${sofa[i].altTxt}>
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__titlePrice">
-                        <h2>${product[0].name}</h2>
-                        <p>${product[0].price}€</p>
-                        <p>couleur choisie</p>
+                        <h2>${sofa[i].name}</h2>
+                        <p>${sofa[i].price}€</p>
+                        <p>${product.selectedColor}</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
                             <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100"
-                            value="0">
+                            value="${product.selectedQuantity}">
                         </div>
                     </div>
-                    <div id=${product[0]._id} class="cart__item__content__settings__delete">
+                    <div id=${product.productId} class="cart__item__content__settings__delete">
                         <p class="deleteItem">Supprimer</p>
                     </div>
                 </div>
             </article>`;
         });
-        divTotal.innerHTML += `
-            <p>Total <span id="totalQuantity"></span> 
-                articles: <span id="totalPrice">${cartCost/10}</span> €
-            </p>
-            </div>`
     }
 }
-const products = [
-    {
-        productId: "id",
-        selectedColor: "color",
-        selectedQuantity: 2,
-    },
-    {
-        productId: "id",
-        selectedColor: "color",
-        selectedQuantity: 2,
-    }
-]
 
 /*function removeProduct() {
-    const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete p');
-    //console.log(suppressButton);
+    const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete');
+    console.log(suppressButton);
     suppressButton.forEach((button) => {
         button.addEventListener('click', (e) => {
             console.log(e);
-            localStorage.removeItem('products', getProduct);
+            localStorage.removeItem('products');
             window.location.reload();
         });
     });

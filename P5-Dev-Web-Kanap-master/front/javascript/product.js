@@ -3,8 +3,8 @@ function getProductUrl() {
     //console.log(urlLoc);
     const url = new URL(urlLoc);
     //console.log(url);
-    const productId = url.searchParams.get("id");
-    return productId;
+    const urlId = url.searchParams.get("id");
+    return urlId;
 }
 getProductUrl();
 
@@ -87,7 +87,7 @@ function getProductOptions() {
         //console.log(e.target.value);
 
         localStorage.setItem("selectedColor", selectedColor);
-        console.log(localStorage.getItem('selectedColor'));
+        //console.log(localStorage.getItem('selectedColor'));
     })
     const quantity = document.querySelector('input#quantity');
     //console.log(quantity);
@@ -96,6 +96,9 @@ function getProductOptions() {
         const selectedQuantity = e.target.value;
         //console.log(e.target.value);
         localStorage.setItem("selectedQuantity", selectedQuantity);
-        console.log(localStorage.getItem('selectedQuantity'));
+        parseInt(localStorage.selectedQuantity);
+        //console.log(typeof(parseInt(localStorage.selectedQuantity)));
+        //console.log(localStorage.getItem('selectedQuantity'));
+        //console.log(parseInt(localStorage.selectedQuantity));
     })
 }
