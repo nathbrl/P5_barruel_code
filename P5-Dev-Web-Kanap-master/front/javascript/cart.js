@@ -11,16 +11,16 @@ getProductUrl();
 function getAllProducts() {
     fetch("http://localhost:3000/api/products/")
         .then((res) => res.json())
-        .then((sofa) => sofa.forEach ((product) => {
+        .then((sofa) =>  {
                 //console.log(sofa);
+                savingProductId(sofa);
                 displayCartItems(sofa);
-                storeProduct(sofa);
-                cartTotalCost(product);
-        }));
+                checkFormValidity();
+        });
 }
 getAllProducts();
 
-function storeProduct(sofa) {
+function savingProductId(sofa) {
     const addToCartButton = document.querySelectorAll('#addToCart');
     //console.log(addToCartButton);
     addToCartButton.forEach((button) => {
@@ -29,23 +29,52 @@ function storeProduct(sofa) {
             //console.log(productId);
             const getProduct = sofa.filter(sofa => sofa._id == productId);
             //console.log(getProduct);
-
-            const product = {
-                productId: localStorage.productId,
-                selectedColor: localStorage.selectedColor,
-                selectedQuantity: localStorage.selectedQuantity,
+            //totalQuantity(getProduct[0]);
+            //cartTotalCost(getProduct[0]);
+            console.log(getProduct[0]);
+            if (getProduct) {
+                localStorage.setItem('selectedQuantity', + 1);
+                localStorage.setItem(sofa);
             }
-            //console.log(product);
-            cart = JSON.parse(localStorage.getItem("products")) || [];
-            cart.push(product);
-            //console.log(cart);
-            localStorage.setItem("products", JSON.stringify(cart));
-            //console.log(cart);
         });
     });
 }
 
-function cartTotalCost(product) {
+/*function totalQuantity(sofa) {
+    let quantity = parseInt(localStorage.getItem('selectedQuantity'));
+    console.log(quantity);
+
+    let cartItem = localStorage.getItem('products');
+    cartItem = JSON.parse(cartItem);
+
+    let productId = localStorage.productId;
+    console.log(productId);
+    let productColor = localStorage.selectedColor;
+    console.log(productColor);
+
+    if (productColor == productId) {
+        localStorage.setItem('selectedQuantity', quantity + 1);
+    } else {
+        localStorage.setItem('selectedQuantity', 1);
+    }
+    storeProducts(sofa);
+}*/
+
+function storeProducts() {
+    const product = {
+        productId: localStorage.productId,
+        selectedColor: localStorage.selectedColor,
+        selectedQuantity: localStorage.selectedQuantity,
+    }
+    //console.log(product);
+    cart = JSON.parse(localStorage.getItem("products")) || [];
+    cart.push(product);
+    //console.log(cart);
+    localStorage.setItem("products", JSON.stringify(cart));
+    //console.log(cart);
+}
+
+/*function cartTotalCost(product) {
     let cartCost = localStorage.getItem('totalCost');
     //console.log(product);
     if(cartCost != null) {
@@ -60,9 +89,9 @@ function cartTotalCost(product) {
 
     const totalCart = document.querySelector('span#totalPrice');
     //console.log(totalCart);
-    totalCart.innerHTML = cartCost;
+    //totalCart.innerHTML = cartCost;
     //console.log(totalCart);
-}
+}*/
 
 function displayCartItems(sofa) {
     //Récupérer l'array avec tous les prdt // = cartItems
@@ -93,7 +122,7 @@ function displayCartItems(sofa) {
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
-                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100"
+                            <input type="number" id="quantity" name="itemQuantity" min="1" max="100"
                             value="${product.selectedQuantity}">
                         </div>
                     </div>
@@ -118,3 +147,53 @@ function displayCartItems(sofa) {
     });
 }
 removeProduct();*/
+
+function checkFormValidity() {
+    const firstName = document.querySelector('#firstName');
+    console.log(firstName);
+    const lastName = document.querySelector('#lastName');
+    console.log(lastName);
+    const address = document.querySelector('#address');
+    console.log(address);
+    const city = document.querySelector('#city');
+    console.log(city);
+    const email = document.querySelector('#email');
+    console.log(email);
+    const form = document.querySelector('.cart__order__form');
+    console.log(form);
+
+    const regexForName = /^([a-zA-Zàâäéèêëïîôöùûüç' ]+)$/;
+    // /^[a-z ,.'-]+$/i
+    const regexForAddress = /^([0-9]{1,3}(([,. ]?){1}[a-zA-Zàâäéèêëïîôöùûüç' ]+))$/;
+    const regForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!firstName.value.match(regexForName)) {
+            alert('le champ prénom contient des erreurs');
+            window.location = 'page-panier.html';
+        }
+        if (!lastName.value.match(regexForName)) {
+            alert('le champ nom contient des erreurs');
+            window.location = 'page-panier.html';
+        }
+        if (!address.value.match(regexForAddress)) {
+            alert('le champ addresse contient des erreurs');
+            window.location = 'page-panier.html';
+        }
+        if (!city.value.match(regexForName)) {
+            alert('le champ ville contient des erreurs');
+            window.location = 'page-panier.html';
+        }
+        if (!email.value.match(regForEmail)) {
+            alert('le champ email contient des erreurs');
+            window.location = 'page-panier.html';
+        } else {
+            sendOrder();
+        }
+    })
+}
+
+function sendOrder() {
+
+}

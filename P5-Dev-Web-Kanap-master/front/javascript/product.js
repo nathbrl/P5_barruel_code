@@ -71,21 +71,21 @@ function createColorOption(sofa) {
         //console.log(colorOption);
         select.add(colorOption);
     });
-    getProductOptions();
+    productOptions();
 }
 
-function getProductOptions() {
+function productOptions() {
     const select = document.querySelector('#colors');
     //console.log(select);
     const productId = getProductUrl();
     //console.log(productId);
-    localStorage.setItem("productId", productId);
     //console.log(localStorage.getItem('productId'));
     select.addEventListener('change', (e) => {
         const selectedColor = e.target.value;
         //console.log(selectedColor);
         //console.log(e.target.value);
-
+        
+        localStorage.setItem("productId", productId);
         localStorage.setItem("selectedColor", selectedColor);
         //console.log(localStorage.getItem('selectedColor'));
     })
