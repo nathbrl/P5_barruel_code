@@ -15,7 +15,7 @@ function getAllProducts() {
                 //console.log(sofa);
                 savingProductId(sofa);
                 displayCartItems(sofa);
-                checkFormValidity();
+                //checkFormValidity();
         });
 }
 getAllProducts();
@@ -31,16 +31,13 @@ function savingProductId(sofa) {
             //console.log(getProduct);
             //totalQuantity(getProduct[0]);
             //cartTotalCost(getProduct[0]);
-            console.log(getProduct[0]);
-            if (getProduct) {
-                localStorage.setItem('selectedQuantity', + 1);
-                localStorage.setItem(sofa);
-            }
+            //console.log(getProduct[0]);
+            storeProducts();
         });
     });
 }
 
-/*function totalQuantity(sofa) {
+function totalQuantity(sofa) {
     let quantity = parseInt(localStorage.getItem('selectedQuantity'));
     console.log(quantity);
 
@@ -57,8 +54,7 @@ function savingProductId(sofa) {
     } else {
         localStorage.setItem('selectedQuantity', 1);
     }
-    storeProducts(sofa);
-}*/
+}
 
 function storeProducts() {
     const product = {
@@ -71,9 +67,8 @@ function storeProducts() {
     cart.push(product);
     //console.log(cart);
     localStorage.setItem("products", JSON.stringify(cart));
-    //console.log(cart);
+    console.log(localStorage.getItem("products"));
 }
-
 /*function cartTotalCost(product) {
     let cartCost = localStorage.getItem('totalCost');
     //console.log(product);
@@ -148,7 +143,7 @@ function displayCartItems(sofa) {
 }
 removeProduct();*/
 
-function checkFormValidity() {
+/*function checkFormValidity() {
     const firstName = document.querySelector('#firstName');
     console.log(firstName);
     const lastName = document.querySelector('#lastName');
@@ -196,4 +191,4 @@ function checkFormValidity() {
 
 function sendOrder() {
 
-}
+}*/
