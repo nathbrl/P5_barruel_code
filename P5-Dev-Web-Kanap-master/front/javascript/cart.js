@@ -11,12 +11,13 @@ getProductUrl();
 function getAllProducts() {
     fetch("http://localhost:3000/api/products/")
         .then((res) => res.json())
-        .then((sofa) =>  {
-                //console.log(sofa);
-                savingProductId(sofa);
-                displayCartItems(sofa);
-                //checkFormValidity();
-        });
+        .then((sofa) => {
+            //console.log(sofa);
+            savingProductId(sofa);
+            checkFormValidity();
+            displayCartItems();
+            
+        }); 
 }
 getAllProducts();
 
@@ -28,39 +29,34 @@ function savingProductId(sofa) {
             const productId = getProductUrl();
             //console.log(productId);
             const getProduct = sofa.filter(sofa => sofa._id == productId);
-            //console.log(getProduct);
-            //totalQuantity(getProduct[0]);
-            //cartTotalCost(getProduct[0]);
+            //console.log(getProduct[0].name);
+            //cartTotalCost();
             //console.log(getProduct[0]);
-            storeProducts();
+            storeProducts(getProduct);
         });
     });
 }
 
-function totalQuantity(sofa) {
-    let quantity = parseInt(localStorage.getItem('selectedQuantity'));
-    console.log(quantity);
-
-    let cartItem = localStorage.getItem('products');
-    cartItem = JSON.parse(cartItem);
-
-    let productId = localStorage.productId;
-    console.log(productId);
-    let productColor = localStorage.selectedColor;
-    console.log(productColor);
-
-    if (productColor == productId) {
-        localStorage.setItem('selectedQuantity', quantity + 1);
-    } else {
-        localStorage.setItem('selectedQuantity', 1);
-    }
-}
-
-function storeProducts() {
+function storeProducts(sofa) {
+    const productName = sofa[0].name;
+    //console.log(productName);
+    const productPrice = sofa[0].price;
+    //console.log(productPrice);
+    const productImg = sofa[0].imageUrl;
+    //console.log(productImg);
+    const altTxt = sofa[0].altTxt;
+    //console.log(altTxt);
+    const productId = localStorage.getItem('productId');
+    //console.log(productId);
+    const selectedColor = localStorage.getItem('selectedColor');
     const product = {
         productId: localStorage.productId,
         selectedColor: localStorage.selectedColor,
         selectedQuantity: localStorage.selectedQuantity,
+        productName: productName,
+        productPrice: productPrice,
+        productImg: productImg,
+        imgAltTxt: altTxt,
     }
     //console.log(product);
     cart = JSON.parse(localStorage.getItem("products")) || [];
@@ -68,8 +64,15 @@ function storeProducts() {
     //console.log(cart);
     localStorage.setItem("products", JSON.stringify(cart));
     console.log(localStorage.getItem("products"));
+
+    if (productId && selectedColor) {
+        //console.log(product.selectedColor == selectedColor);
+        localStorage.selectedQuantity++;
+    }
 }
-/*function cartTotalCost(product) {
+
+
+function cartTotalCost(product) {
     let cartCost = localStorage.getItem('totalCost');
     //console.log(product);
     if(cartCost != null) {
@@ -86,32 +89,30 @@ function storeProducts() {
     //console.log(totalCart);
     //totalCart.innerHTML = cartCost;
     //console.log(totalCart);
-}*/
+}
 
-function displayCartItems(sofa) {
-    //Récupérer l'array avec tous les prdt // = cartItems
-    // Itérer sur l'arr, log l'arr du prdt + log (stocker l'id du prd)
-    
+function displayCartItems() {
     let divProduct = document.querySelector("#cart__items");
     //console.log(divProduct);
     let cartItems = localStorage.getItem("products");
     cartItems = JSON.parse(cartItems);
-    let cartCost = localStorage.getItem('totalCost');
     //console.log(cartItems);
-
+    let cartCost = localStorage.getItem('totalCost');
+    //console.log(productId);
+   
     if (cartItems && divProduct) {
         divProduct.innerHTML = '';
-        cartItems.forEach((product, i) => {
+        cartItems.forEach((product) => {
             //console.log(product);
             divProduct.innerHTML += `
             <article class="cart__item" data-id=${product.productId}>
                 <div class="cart__item__img">
-                    <img src=${sofa[i].imageUrl} alt=${sofa[i].altTxt}>
+                    <img src=${product.productImg} alt=${product.imgAltTxt}>
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__titlePrice">
-                        <h2>${sofa[i].name}</h2>
-                        <p>${sofa[i].price}€</p>
+                        <h2>${product.productName}</h2>
+                        <p>${product.productPrice}€</p>
                         <p>${product.selectedColor}</p>
                     </div>
                     <div class="cart__item__content__settings">
@@ -143,19 +144,19 @@ function displayCartItems(sofa) {
 }
 removeProduct();*/
 
-/*function checkFormValidity() {
+function checkFormValidity() {
     const firstName = document.querySelector('#firstName');
-    console.log(firstName);
+    //console.log(firstName);
     const lastName = document.querySelector('#lastName');
-    console.log(lastName);
+    //console.log(lastName);
     const address = document.querySelector('#address');
-    console.log(address);
+    //console.log(address);
     const city = document.querySelector('#city');
-    console.log(city);
+    //console.log(city);
     const email = document.querySelector('#email');
-    console.log(email);
+    //console.log(email);
     const form = document.querySelector('.cart__order__form');
-    console.log(form);
+    //console.log(form);
 
     const regexForName = /^([a-zA-Zàâäéèêëïîôöùûüç' ]+)$/;
     // /^[a-z ,.'-]+$/i
@@ -184,11 +185,11 @@ removeProduct();*/
             alert('le champ email contient des erreurs');
             window.location = 'page-panier.html';
         } else {
-            sendOrder();
+            //sendOrder();
         }
     })
 }
 
-function sendOrder() {
+/*function sendOrder() {
 
 }*/

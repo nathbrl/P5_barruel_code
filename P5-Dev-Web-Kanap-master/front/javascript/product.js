@@ -84,7 +84,6 @@ function productOptions() {
         const selectedColor = e.target.value;
         //console.log(selectedColor);
         //console.log(e.target.value);
-        
         localStorage.setItem("productId", productId);
         localStorage.setItem("selectedColor", selectedColor);
         //console.log(localStorage.getItem('selectedColor'));

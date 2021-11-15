@@ -1,7 +1,7 @@
 function getAllProducts() {
     fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
-        .then((sofas) => sofas.forEach((sofa) => {
+        .then((allSofas) => allSofas.forEach((sofa) => {
             //console.log(sofa);
             //console.log(i);
             displaySofas(sofa);
