@@ -14,7 +14,7 @@ function getAllProducts() {
         .then((sofa) => {
             //console.log(sofa);
             savingProductId(sofa);
-            checkFormValidity();
+            //checkFormValidity();
             displayCartItems();
             
         }); 
@@ -61,14 +61,18 @@ function storeProducts(sofa) {
     //console.log(product);
     cart = JSON.parse(localStorage.getItem("products")) || [];
     cart.push(product);
+    const found = cart.find(element => console.log(element));
+    /*if (localStorage) {
+        console.log(localStorage.products);
+        console.log(cart);
+    }else {
+        cart.push(product);
+        console.log(cart);
+        console.log(cart);
+    }*/
     //console.log(cart);
     localStorage.setItem("products", JSON.stringify(cart));
     console.log(localStorage.getItem("products"));
-
-    if (productId && selectedColor) {
-        //console.log(product.selectedColor == selectedColor);
-        localStorage.selectedQuantity++;
-    }
 }
 
 
@@ -144,7 +148,7 @@ function displayCartItems() {
 }
 removeProduct();*/
 
-function checkFormValidity() {
+/*function checkFormValidity() {
     const firstName = document.querySelector('#firstName');
     //console.log(firstName);
     const lastName = document.querySelector('#lastName');
@@ -188,7 +192,7 @@ function checkFormValidity() {
             //sendOrder();
         }
     })
-}
+}*/
 
 /*function sendOrder() {
 
