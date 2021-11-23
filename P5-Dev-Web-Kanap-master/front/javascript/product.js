@@ -94,8 +94,8 @@ function productOptions() {
         //console.log(e);
         const selectedQuantity = e.target.value;
         //console.log(e.target.value);
-        localStorage.setItem("selectedQuantity", selectedQuantity);
         parseInt(localStorage.selectedQuantity);
+        localStorage.setItem("selectedQuantity", selectedQuantity);
         //console.log(typeof(parseInt(localStorage.selectedQuantity)));
         //console.log(localStorage.getItem('selectedQuantity'));
         //console.log(parseInt(localStorage.selectedQuantity));

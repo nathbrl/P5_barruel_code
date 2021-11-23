@@ -49,7 +49,10 @@ function storeProducts(sofa) {
     const productId = localStorage.getItem('productId');
     //console.log(productId);
     const selectedColor = localStorage.getItem('selectedColor');
-    const product = {
+    let selectedQuantity = localStorage.getItem('selectedQuantity');
+    //console.log(selectedQuantity);
+    //console.log(selectedColor);
+    let product = {
         productId: localStorage.productId,
         selectedColor: localStorage.selectedColor,
         selectedQuantity: localStorage.selectedQuantity,
@@ -61,38 +64,15 @@ function storeProducts(sofa) {
     //console.log(product);
     cart = JSON.parse(localStorage.getItem("products")) || [];
     cart.push(product);
-    const found = cart.find(element => console.log(element));
-    /*if (localStorage) {
-        console.log(localStorage.products);
-        console.log(cart);
-    }else {
-        cart.push(product);
-        console.log(cart);
-        console.log(cart);
-    }*/
-    //console.log(cart);
-    localStorage.setItem("products", JSON.stringify(cart));
-    console.log(localStorage.getItem("products"));
-}
-
-
-function cartTotalCost(product) {
-    let cartCost = localStorage.getItem('totalCost');
-    //console.log(product);
-    if(cartCost != null) {
-        cartCost = parseInt(cartCost);
-        localStorage.setItem("totalCost", cartCost + product.price);
-    } else {
-        localStorage.setItem("totalCost", product.price);
+    //const foundId = cart.find(element => (element.productId == productId));
+    //console.log(foundId);
+    //const foundColor = cart.find(element => console.log(element.selectedColor == selectedColor));
+    //console.log(foundColor);
+    if (product == cart.find(element => (element.productId == productId)) && cart.find(element => (element.selectedColor == selectedColor))) {
+        console.log('ok'); //test pour voir si condition = true
+        
     }
-    const totalQuantity = document.querySelector('span#totalQuantity');
-    //console.log(totalQuantity);
-    //totalQuantity.innerHTML = '6';
-
-    const totalCart = document.querySelector('span#totalPrice');
-    //console.log(totalCart);
-    //totalCart.innerHTML = cartCost;
-    //console.log(totalCart);
+    localStorage.setItem("products", JSON.stringify(cart));
 }
 
 function displayCartItems() {
@@ -101,8 +81,6 @@ function displayCartItems() {
     let cartItems = localStorage.getItem("products");
     cartItems = JSON.parse(cartItems);
     //console.log(cartItems);
-    let cartCost = localStorage.getItem('totalCost');
-    //console.log(productId);
    
     if (cartItems && divProduct) {
         divProduct.innerHTML = '';
@@ -134,19 +112,6 @@ function displayCartItems() {
         });
     }
 }
-
-/*function removeProduct() {
-    const suppressButton = document.querySelectorAll('.cart__item__content__settings__delete');
-    console.log(suppressButton);
-    suppressButton.forEach((button) => {
-        button.addEventListener('click', (e) => {
-            console.log(e);
-            localStorage.removeItem('products');
-            window.location.reload();
-        });
-    });
-}
-removeProduct();*/
 
 /*function checkFormValidity() {
     const firstName = document.querySelector('#firstName');
