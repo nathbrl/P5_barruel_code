@@ -92,12 +92,13 @@ function productOptions() {
     //console.log(quantity);
     quantity.addEventListener('change', (e) => {
         //console.log(e);
-        const selectedQuantity = e.target.value;
+        const selectedQuantity = parseInt(e.target.value);
         //console.log(e.target.value);
-        parseInt(localStorage.selectedQuantity);
-        localStorage.setItem("selectedQuantity", selectedQuantity);
+        localStorage.setItem("selectedQuantity", parseInt(selectedQuantity));
+        //console.log(typeof parseInt(localStorage.selectedQuantity));
         //console.log(typeof(parseInt(localStorage.selectedQuantity)));
-        //console.log(localStorage.getItem('selectedQuantity'));
+        console.log(typeof selectedQuantity);
         //console.log(parseInt(localStorage.selectedQuantity));
     })
 }
+

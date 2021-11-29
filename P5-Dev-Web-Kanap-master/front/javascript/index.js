@@ -4,12 +4,12 @@ function getAllProducts() {
         .then((allSofas) => allSofas.forEach((sofa) => {
             //console.log(sofa);
             //console.log(i);
-            displaySofas(sofa);
+            displaySofaCard(sofa);
         }));
 }
 getAllProducts();
 
-function displaySofas(sofa) {
+function displaySofaCard(sofa) {
     const section = document.querySelector('.items');
     //console.log(section);
 

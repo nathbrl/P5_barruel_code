@@ -11,9 +11,9 @@ getProductUrl();
 function getAllProducts() {
     fetch("http://localhost:3000/api/products/")
         .then((res) => res.json())
-        .then((sofa) => {
+        .then((sofas) => {
             //console.log(sofa);
-            savingProductId(sofa);
+            savingProductId(sofas);
             //checkFormValidity();
             displayCartItems();
             
@@ -21,30 +21,28 @@ function getAllProducts() {
 }
 getAllProducts();
 
-function savingProductId(sofa) {
+function savingProductId(sofas) {
     const addToCartButton = document.querySelectorAll('#addToCart');
     //console.log(addToCartButton);
     addToCartButton.forEach((button) => {
         button.addEventListener('click', () => {
             const productId = getProductUrl();
             //console.log(productId);
-            const getProduct = sofa.filter(sofa => sofa._id == productId);
-            //console.log(getProduct[0].name);
-            //cartTotalCost();
-            //console.log(getProduct[0]);
+            const getProduct = sofas.filter(sofa => sofa._id == productId);
+            //console.log(getProduct);
             storeProducts(getProduct);
         });
     });
 }
 
-function storeProducts(sofa) {
-    const productName = sofa[0].name;
+function storeProducts(sofas) {
+    const productName = sofas[0].name;
     //console.log(productName);
-    const productPrice = sofa[0].price;
+    const productPrice = sofas[0].price;
     //console.log(productPrice);
-    const productImg = sofa[0].imageUrl;
+    const productImg = sofas[0].imageUrl;
     //console.log(productImg);
-    const altTxt = sofa[0].altTxt;
+    const altTxt = sofas[0].altTxt;
     //console.log(altTxt);
     const productId = localStorage.getItem('productId');
     //console.log(productId);
@@ -53,9 +51,9 @@ function storeProducts(sofa) {
     //console.log(selectedQuantity);
     //console.log(selectedColor);
     let product = {
-        productId: localStorage.productId,
-        selectedColor: localStorage.selectedColor,
-        selectedQuantity: localStorage.selectedQuantity,
+        productId: productId,
+        selectedColor: selectedColor,
+        selectedQuantity: parseInt(selectedQuantity),
         productName: productName,
         productPrice: productPrice,
         productImg: productImg,
@@ -68,10 +66,9 @@ function storeProducts(sofa) {
     //console.log(foundId);
     //const foundColor = cart.find(element => console.log(element.selectedColor == selectedColor));
     //console.log(foundColor);
-    if (product == cart.find(element => (element.productId == productId)) && cart.find(element => (element.selectedColor == selectedColor))) {
-        console.log('ok'); //test pour voir si condition = true
-        
-    }
+    cart.forEach((product) => {
+        console.log(product.productPrice);
+    })
     localStorage.setItem("products", JSON.stringify(cart));
 }
 
