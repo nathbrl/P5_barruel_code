@@ -1,86 +1,94 @@
-function displayCartProducts() {
-    let divProduct = document.querySelector("#cart__items");
-    let cartItems = localStorage.getItem("products");
-    cartItems = JSON.parse(cartItems);
-    console.log(cartItems);
-   
-    if (cartItems && divProduct) {
-        divProduct.innerHTML = '';
-        cartItems.forEach((product) => {
-            divProduct.innerHTML += `
-            <article class="cart__item" data-id=${product.productId}>
+let divProduct = document.querySelector("#cart__items");
+let cartItems = localStorage.getItem("products");
+cartItems = JSON.parse(cartItems);
+
+if (cartItems && divProduct) {
+    divProduct.innerHTML = "";
+    cartItems.forEach((product) => {
+        divProduct.innerHTML += `
+            <article class="cart__item" data-id=${product.currentProductId}>
                 <div class="cart__item__img">
-                    <img src=${product.productImage}>
+                    <img src=${product.currentProductImage} alt=${product.currentAltTxt}>
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__titlePrice">
-                        <h2>${product.productName}</h2>
-                        <p>${product.productPrice}€</p>
-                        <p>${product.selectedColor}</p>
+                        <h2>${product.currentProductName}</h2>
+                        <p>${product.currentProductPrice}€</p>
+                        <p>${product.currentSelectedColor}</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
                             <input type="number" id="quantity" name="itemQuantity" min="1" max="100"
-                            value="${product.selectedQuantity}">
+                            value="${product.currentSelectedQuantity}">
                         </div>
                     </div>
-                    <div id=${product.productId} class="cart__item__content__settings__delete">
+                    <div class="cart__item__content__settings__delete">
                         <p class="deleteItem">Supprimer</p>
                     </div>
                 </div>
             </article>`;
-        });
-    }
+    });
 }
-displayCartProducts();
 
-/*function checkFormValidity() {
-    const firstName = document.querySelector('#firstName');
-    //console.log(firstName);
-    const lastName = document.querySelector('#lastName');
-    //console.log(lastName);
-    const address = document.querySelector('#address');
-    //console.log(address);
-    const city = document.querySelector('#city');
-    //console.log(city);
-    const email = document.querySelector('#email');
-    //console.log(email);
-    const form = document.querySelector('.cart__order__form');
-    //console.log(form);
+/*const suppressButtons = document.querySelectorAll('p.deleteItem');
+suppressButtons.addEventListener('click', () => {
+    localStorage.removeItem('products');
+    window.location.reload();
+})*/
 
-    const regexForName = /^([a-zA-Zàâäéèêëïîôöùûüç' ]+)$/;
-    // /^[a-z ,.'-]+$/i
-    const regexForAddress = /^([0-9]{1,3}(([,. ]?){1}[a-zA-Zàâäéèêëïîôöùûüç' ]+))$/;
-    const regForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const firstName = document.querySelector("#firstName");
+const lastName = document.querySelector("#lastName");
+const address = document.querySelector("#address");
+const city = document.querySelector("#city");
+const email = document.querySelector("#email");
+const form = document.querySelector(".cart__order__form");
 
-    form.addEventListener('submit', (e) => {
+const regexForName = /^([a-zA-Zàâäéèêëïîôöùûüç' ]+)$/;
+const regexForAddress = /^([0-9]{1,3}(([,. ]?){1}[a-zA-Zàâäéèêëïîôöùûüç' ]+))$/;
+const regForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+function checkFormValidity() {
+    form.addEventListener("submit", (e) => {
+
         e.preventDefault();
+
         if (!firstName.value.match(regexForName)) {
-            alert('le champ prénom contient des erreurs');
-            window.location = 'page-panier.html';
+        firstName.setCustomValidity("le champ prénom contient des erreurs");
+        firstName.style.border = 'solid 2px red';
+        } else if (firstName.value.match(regexForName)) {
+            firstName.style.border = 'solid 2px #D5FCB4';
         }
         if (!lastName.value.match(regexForName)) {
-            alert('le champ nom contient des erreurs');
-            window.location = 'page-panier.html';
+        lastName.setCustomValidity("le champ nom contient des erreurs");
+        lastName.style.border = 'solid 2px red';
+        } else if (lastName.value.match(regexForName)) {
+            lastName.style.border = 'solid 2px #D5FCB4';
         }
         if (!address.value.match(regexForAddress)) {
-            alert('le champ addresse contient des erreurs');
-            window.location = 'page-panier.html';
+        address.setCustomValidity("le champ addresse contient des erreurs");
+        address.style.border = 'solid 2px red';
+        } else if (address.value.match(regexForAddress)) {
+            address.style.border = 'solid 2px #D5FCB4';
         }
         if (!city.value.match(regexForName)) {
-            alert('le champ ville contient des erreurs');
-            window.location = 'page-panier.html';
+        city.setCustomValidity("le champ ville contient des erreurs");
+        city.style.border = 'solid 2px red';
+        } else if (city.value.match(regexForName)) {
+            city.style.border = 'solid 2px #D5FCB4';
         }
         if (!email.value.match(regForEmail)) {
-            alert('le champ email contient des erreurs');
-            window.location = 'page-panier.html';
+        email.setCustomValidity("le champ email contient des erreurs");
+        email.style.border = 'solid 2px red';
+        } else if (email.value.match(regForEmail)) {
+            email.style.border = 'solid 2px #D5FCB4';
         } else {
-            //sendOrder();
+        //sendOrder();
         }
-    })
-}*/
+    });
+}
 
+checkFormValidity();
 /*function sendOrder() {
 
 }*/

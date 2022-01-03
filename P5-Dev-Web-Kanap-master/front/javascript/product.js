@@ -42,11 +42,11 @@ function displayProductDetails(sofa) {
 let cart = JSON.parse(localStorage.getItem('products')) || [];
   
 function addToCart(sofa) {
-    const productImage = sofa.imageUrl;
     const addToCartButton = document.querySelector('#addToCart');
     let select = document.querySelector('#colors');
     let quantity = document.querySelector('input#quantity');
-
+    const productImage = sofa.imageUrl;
+    const altTxt = sofa.altTxt;
     const productName = sofa.name;
     const productPrice = sofa.price;
     let selectedColor = select.addEventListener('change', (e) => {
@@ -55,28 +55,26 @@ function addToCart(sofa) {
     let selectedQuantity = quantity.addEventListener('change', (e) => {
          selectedQuantity = parseInt(e.target.value);
     });
-    
     addToCartButton.addEventListener('click', () => {
-
         let productDescription = {
-            productImage: productImage,
-            productId: productId,
-            selectedColor: selectedColor,
-            selectedQuantity: selectedQuantity,
-            productName: productName,
-            productPrice: productPrice,
+            currentProductId: productId,
+            currentSelectedColor: selectedColor,
+            currentSelectedQuantity: selectedQuantity,
+            currentProductName: productName,
+            currentProductPrice: productPrice,
+            currentProductImage: productImage,
+            currentAltTxt: altTxt,
         }
-
-        if (cart.some((item) => item.selectedColor === productDescription.selectedColor) 
-        && cart.some((item) => item.productId === productDescription.productId)) {
+        if (cart.some((item) => item.currentSelectedColor === selectedColor 
+            && item.currentProductId === productId)) {
             console.log('product is already in cart');
-            console.log(productDescription.selectedQuantity);
+            cart.forEach((item) => console.log(item.currentSelectedQuantity += productDescription.currentSelectedQuantity));
         } else {
             console.log('product is not in cart yet');
-            productDescription.selectedQuantity = selectedQuantity;
+            productDescription.currentSelectedQuantity = selectedQuantity;
             cart.push(productDescription);
-            console.log(cart);
         }
         localStorage.setItem('products', JSON.stringify(cart));
     });
 }
+
