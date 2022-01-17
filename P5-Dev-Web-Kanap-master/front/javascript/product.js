@@ -11,7 +11,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     .then((res) => res.json())
     .then((sofa) => {
         displayProductDetails(sofa);
-        addToCart(sofa);
+        addProductToCart(sofa);
     });
 
 function displayProductDetails(sofa) {
@@ -40,39 +40,43 @@ function displayProductDetails(sofa) {
 }
 
 let cart = JSON.parse(localStorage.getItem('products')) || [];
-  
-function addToCart(sofa) {
-    const addToCartButton = document.querySelector('#addToCart');
-    let select = document.querySelector('#colors');
-    let quantity = document.querySelector('input#quantity');
+const addToCartButton = document.querySelector('#addToCart');
+let select = document.querySelector('#colors');
+let quantity = document.querySelector('input#quantity');
+
+function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
-    const altTxt = sofa.altTxt;
+    const productAltTxt = sofa.altTxt;
     const productName = sofa.name;
     const productPrice = sofa.price;
     let selectedColor = select.addEventListener('change', (e) => {
         selectedColor = e.target.value;
     });
     let selectedQuantity = quantity.addEventListener('change', (e) => {
-         selectedQuantity = parseInt(e.target.value);
+        selectedQuantity = parseInt(e.target.value);
     });
     addToCartButton.addEventListener('click', () => {
-        let productDescription = {
+        let currentProduct = {
             currentProductId: productId,
-            currentSelectedColor: selectedColor,
-            currentSelectedQuantity: selectedQuantity,
-            currentProductName: productName,
-            currentProductPrice: productPrice,
-            currentProductImage: productImage,
-            currentAltTxt: altTxt,
+            productSelectedColor: selectedColor,
+            productSelectedQuantity: selectedQuantity,
+            productName: productName,
+            productPrice: productPrice,
+            productImage: productImage,
+            altTxt: productAltTxt,
         }
-        if (cart.some((item) => item.currentSelectedColor === selectedColor 
+        if (cart.some(item => item.productSelectedColor === selectedColor 
             && item.currentProductId === productId)) {
-            console.log('product is already in cart');
-            cart.forEach((item) => console.log(item.currentSelectedQuantity += productDescription.currentSelectedQuantity));
+            currentProduct.productSelectedQuantity += selectedQuantity;
+            cart.forEach((item) => {
+                if (item.productSelectedColor === selectedColor 
+                    && item.currentProductId === productId) {
+                        item.productSelectedQuantity += selectedQuantity;
+                }
+            });
         } else {
-            console.log('product is not in cart yet');
-            productDescription.currentSelectedQuantity = selectedQuantity;
-            cart.push(productDescription);
+            currentProduct.productSelectedQuantity = selectedQuantity;
+            cart.push(currentProduct);
         }
         localStorage.setItem('products', JSON.stringify(cart));
     });
