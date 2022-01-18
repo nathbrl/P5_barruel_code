@@ -48,7 +48,6 @@ function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
     const productAltTxt = sofa.altTxt;
     const productName = sofa.name;
-    const productPrice = sofa.price;
     let selectedColor = select.addEventListener('change', (e) => {
         selectedColor = e.target.value;
     });
@@ -61,7 +60,6 @@ function addProductToCart(sofa) {
             productSelectedColor: selectedColor,
             productSelectedQuantity: selectedQuantity,
             productName: productName,
-            productPrice: productPrice,
             productImage: productImage,
             altTxt: productAltTxt,
         }
