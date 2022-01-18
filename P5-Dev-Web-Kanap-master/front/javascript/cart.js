@@ -4,31 +4,32 @@ const productId = localStorage.getItem('products.currentProductId');
 
 let divProduct = document.querySelector("#cart__items");
 let cartItems = JSON.parse(localStorage.getItem('products'));
+let inputQuantity = document.querySelectorAll('#quantity');
 let cartFormOrder = document.querySelector('.cart__order__form');
 
-if (cartItems !== null && divProduct) {
+if (cartItems !== null) {
     divProduct.innerHTML = "";
-    cartItems.forEach((product) => {
+    cartItems.forEach((productLS) => {
         //fetch 
-        fetch('http://localhost:3000/api/products/'+`${product.currentProductId}`)
+        fetch('http://localhost:3000/api/products/'+`${productLS.currentProductId}`)
         .then((res) => res.json())
-        .then((item) => {
+        .then((productAPi) => {
             divProduct.innerHTML += `
-                <article class="cart__item" data-id=${item.productId}>
+                <article class="cart__item" data-id=${productAPi.productId}>
                     <div class="cart__item__img">
-                        <img src=${item.imageUrl} alt=${item.altTxt}>
+                        <img src=${productAPi.imageUrl} alt=${productAPi.altTxt}>
                     </div>
                     <div class="cart__item__content">
                         <div class="cart__item__content__titlePrice">
-                            <h2>${item.name}</h2>
-                            <p>${item.price}€</p>
-                            <p>${product.productSelectedColor}</p>
+                            <h2>${productAPi.name}</h2>
+                            <p>${productAPi.price}€</p>
+                            <p>${productLS.productSelectedColor}</p>
                         </div>
                         <div class="cart__item__content__settings">
                             <div class="cart__item__content__settings__quantity">
                                 <p>Qté : </p>
                                 <input type="number" id="quantity" name="itemQuantity" min="1" max="100"
-                                value="${product.productSelectedQuantity}">
+                                value="${productLS.productSelectedQuantity}">
                             </div>
                         </div>
                         <div class="cart__item__content__settings__delete">
@@ -36,19 +37,21 @@ if (cartItems !== null && divProduct) {
                         </div>
                     </div>
                 </article>`;
-            
             const totalArticlesQuantity = document.querySelector('#totalQuantity');
-            let totalArticlesInCart = product.productSelectedQuantity;
+            let totalArticlesInCart = productLS.productSelectedQuantity;
                 console.log(totalArticlesInCart);
                 totalArticlesQuantity.innerHTML = totalArticlesInCart + ' ';
         
             let totalArticles = document.querySelector('#totalPrice');
-             console.log(total = item.price * product.productSelectedQuantity);
+             console.log(total = productAPi.price * productLS.productSelectedQuantity);
                 totalArticles.innerHTML = total;
-        });
-    })
-    
 
+            let changeQuantity = inputQuantity.addEventListener('change', (e) => {
+                changeQuantity = parseInt(e.target.value);
+            });
+        });
+    });
+    
     const suppressButtons = document.querySelectorAll('.deleteItem');
 
     suppressButtons.forEach((button, i) => {
@@ -217,5 +220,3 @@ if (cartItems !== null && divProduct) {
     cartFormOrder.style = 'display: none';
     divProduct.innerHTML = '<h2> Votre panier est vide ! </h2>';
 }
-
-
