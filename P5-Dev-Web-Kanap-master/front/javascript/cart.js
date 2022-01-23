@@ -1,16 +1,16 @@
-
-
 const productId = localStorage.getItem('products.currentProductId');
 
 let divProduct = document.querySelector("#cart__items");
 let cartItems = JSON.parse(localStorage.getItem('products'));
-let inputQuantity = document.querySelectorAll('#quantity');
 let cartFormOrder = document.querySelector('.cart__order__form');
+let totalPrice = document.querySelector('#totalPrice');
+let totalQuantity = document.querySelector('#totalQuantity');
+let totalArticle = [];
+let totalOrder = [];
 
 if (cartItems !== null) {
     divProduct.innerHTML = "";
     cartItems.forEach((productLS) => {
-        //fetch 
         fetch('http://localhost:3000/api/products/'+`${productLS.currentProductId}`)
         .then((res) => res.json())
         .then((productAPi) => {
@@ -37,18 +37,19 @@ if (cartItems !== null) {
                         </div>
                     </div>
                 </article>`;
-            const totalArticlesQuantity = document.querySelector('#totalQuantity');
-            let totalArticlesInCart = productLS.productSelectedQuantity;
-                console.log(totalArticlesInCart);
-                totalArticlesQuantity.innerHTML = totalArticlesInCart + ' ';
-        
-            let totalArticles = document.querySelector('#totalPrice');
-             console.log(total = productAPi.price * productLS.productSelectedQuantity);
-                totalArticles.innerHTML = total;
+            totalOrder.push(productAPi.price * productLS.productSelectedQuantity);
+            let sumOrder = 0;
+            for (let i = 0; i< totalOrder.length; i++) {
+                sumOrder += totalOrder[i];
+            }
+            totalPrice.innerHTML = sumOrder; 
 
-            let changeQuantity = inputQuantity.addEventListener('change', (e) => {
-                changeQuantity = parseInt(e.target.value);
-            });
+            totalArticle.push(productLS.productSelectedQuantity);
+            let sumArticles = 0;
+            for (let j = 0; j < totalArticle.length; j++) {
+                sumArticles += totalArticle[j];
+            }    
+            totalQuantity.innerHTML = sumArticles + ' ';
         });
     });
     
@@ -57,11 +58,10 @@ if (cartItems !== null) {
     suppressButtons.forEach((button, i) => {
         if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
             && item.currentProductId === cartItems[i].currentProductId)) {
-                //console.log("ok");
+                console.log("ok");
                 
             button.addEventListener('click', () => {
                 console.log("button event ok");
-                console.log(cartItems);
                 button.closest('article').remove();
                 //window.location.href = 'cart.html';
             })
