@@ -1,3 +1,8 @@
+/**
+ * 1) Je récupère l'url de la page où je suis actuellement
+ * 2) Je créer un nouvel objet url à partir de l'url où je suis actuellement
+ * 3) enfin à travers le searchParams je récupère l'id pour chaque produit pour ensuite afficher ses détails propres
+ */
 function getProductUrl() {
     const urlLoc = window.location.href;
     const url = new URL(urlLoc);
@@ -7,24 +12,35 @@ function getProductUrl() {
 getProductUrl();
 
 const productId = getProductUrl();
+/**
+ * 1) Je récupère les données de l'APi mais pour un produit uniquement grace à son id unique
+ * 2) Je log la réponse puis je chaine une autre promesse
+ * 3) J'affiche les détail du produit
+ */
 fetch(`http://localhost:3000/api/products/${productId}`)
     .then((res) => res.json())
     .then((sofa) => {
         displayProductDetails(sofa);
         addProductToCart(sofa);
+        optionColor(sofa);
     });
 
+let img = document.querySelector('.item__img img');
+let price = document.querySelector('#price');
+let description = document.querySelector('#description');
+let productName = document.querySelector('#title');
+
 function displayProductDetails(sofa) {
-    const img = document.querySelector('.item__img img');
     img.src = sofa.imageUrl;
     img.alt = sofa.altTxt;
-    const price = document.querySelector('#price');
     price.innerHTML = sofa.price;
-    const description = document.querySelector('#description');
     description.innerHTML = sofa.description;
-    const name = document.querySelector('#title');
-    name.innerHTML = sofa.name;
-    const optionText = document.createElement('option');
+    productName.innerHTML = sofa.name;
+}
+
+const optionText = document.createElement('option');
+
+function optionColor(sofa) {
     const select = document.querySelector('select').options;
     select.add(optionText)
     optionText.setAttribute('disabled', 'disabled');

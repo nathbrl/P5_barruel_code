@@ -1,5 +1,4 @@
 const productId = localStorage.getItem('products.currentProductId');
-
 let divProduct = document.querySelector("#cart__items");
 let cartItems = JSON.parse(localStorage.getItem('products'));
 let cartFormOrder = document.querySelector('.cart__order__form');
@@ -7,6 +6,19 @@ let totalPrice = document.querySelector('#totalPrice');
 let totalQuantity = document.querySelector('#totalQuantity');
 let totalArticle = [];
 let totalOrder = [];
+
+/**
+ * Mise à jour le LocaStorage au moindre changement dans le panier
+ * @cartItems: array qui contient une liste d'objets (produits)
+ */
+function updateCart(cartItems) {
+    if (cartItems.length === 0) {
+        localStorage.removeItem('products');
+    } else {
+        localStorage.setItem('products', JSON.stringify(cartItems));
+    }
+    window.location.href = 'cart.html';
+}
 
 if (cartItems !== null) {
     divProduct.innerHTML = "";
@@ -28,7 +40,7 @@ if (cartItems !== null) {
                         <div class="cart__item__content__settings">
                             <div class="cart__item__content__settings__quantity">
                                 <p>Qté : </p>
-                                <input type="number" id="quantity" name="itemQuantity" min="1" max="100"
+                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100"
                                 value="${productLS.productSelectedQuantity}">
                             </div>
                         </div>
@@ -36,10 +48,20 @@ if (cartItems !== null) {
                             <p class="deleteItem">Supprimer</p>
                         </div>
                     </div>
-                </article>`;
+                </article>
+            `;
+            const changeQuantity = document.querySelectorAll('.itemQuantity');
+            changeQuantity.forEach((input, i) => {
+                input.addEventListener('change', (e) => {
+                    const finalQuantity = parseInt(e.target.value);
+                    cartItems[i].productSelectedQuantity = finalQuantity;
+                    updateCart(cartItems);
+                })
+            })
+
             totalOrder.push(productAPi.price * productLS.productSelectedQuantity);
             let sumOrder = 0;
-            for (let i = 0; i< totalOrder.length; i++) {
+            for (let i = 0; i < totalOrder.length; i++) {
                 sumOrder += totalOrder[i];
             }
             totalPrice.innerHTML = sumOrder; 
@@ -50,24 +72,27 @@ if (cartItems !== null) {
                 sumArticles += totalArticle[j];
             }    
             totalQuantity.innerHTML = sumArticles + ' ';
+
+            const suppressButtons = document.querySelectorAll('.deleteItem');
+            suppressButtons.forEach((button, i) => {
+                button.addEventListener('click', () => {
+                    if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
+                        && item.currentProductId === cartItems[i].currentProductId)) {
+                        cartItems.splice(i, 1);
+                        updateCart(cartItems);
+                    }
+                })
+                /*if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
+                    && item.currentProductId === cartItems[i].currentProductId)) {
+                    button.addEventListener('click', () => {
+                        console.log("button event ok");
+                        cartItems.splice(i, 1);
+                        updateCart(cartItems);
+                    })
+                }*/
+            })
         });
     });
-    
-    const suppressButtons = document.querySelectorAll('.deleteItem');
-
-    suppressButtons.forEach((button, i) => {
-        if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
-            && item.currentProductId === cartItems[i].currentProductId)) {
-                console.log("ok");
-                
-            button.addEventListener('click', () => {
-                console.log("button event ok");
-                button.closest('article').remove();
-                //window.location.href = 'cart.html';
-            })
-            localStorage.setItem('products', JSON.stringify(cartItems));
-        }
-    })
 
     const firstName = document.querySelector("#firstName");
     const lastName = document.querySelector("#lastName");
@@ -178,7 +203,6 @@ if (cartItems !== null) {
     checkFormValidity();
 
     const products = Object.values(cartItems).map((product) => {
-        //console.log(product.currentProductId);
         return product.currentProductId;
     });
 
@@ -210,7 +234,6 @@ if (cartItems !== null) {
         })
         .then((res) => res.json())
         .then (data => {
-            //console.log(data.orderId);
             const orderID = data.orderId;
             console.log(orderID);
             window.location = `confirmation.html?orderId=${orderID}`
@@ -218,5 +241,7 @@ if (cartItems !== null) {
     }
 }else{
     cartFormOrder.style = 'display: none';
-    divProduct.innerHTML = '<h2> Votre panier est vide ! </h2>';
+    divProduct.innerHTML = '<h2 id="title"> Votre panier est vide ! </h2>';
+    let title = document.getElementById('title');
+    title.style.textAlign = "center";
 }

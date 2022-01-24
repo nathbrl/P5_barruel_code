@@ -1,28 +1,22 @@
+/**
+ * 1) Je récupère les produits de l'api grace au fetch
+ * 2) Je log la réponse puis je chaine une autre promesse en demandant l'array des produits
+ * 3) Je boucle à travers mon array afin de générer une carte
+ * 4) Enfin, j'affiche les détail des chaque produits
+ */
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
-    .then((allSofas) => allSofas.forEach((sofa) => {
-        //console.log(sofa);
-        //console.log(i);
-        displaySofaCard(sofa);
-    }));
-/*This function displays all the informations of each sofa in a card*/
-function displaySofaCard(sofa) {
-    const section = document.querySelector('.items');
-    const card = document.createElement('a');
-    card.href = "./product.html?id=" + sofa._id;
-    const article = document.createElement('article');
-    const name = document.createElement('h3');
-    name.classList.add('productName');
-    name.innerHTML = sofa.name;
-    const img = document.createElement('img');
-    img.src = sofa.imageUrl;
-    img.alt = sofa.altTxt;
-    const description = document.createElement('p');
-    description.classList.add('productDescription');
-    description.innerHTML = sofa.description;
-    section.appendChild(card)
-    card.appendChild(article);
-    article.appendChild(img);
-    article.appendChild(name);
-    article.appendChild(description);
-}
+    .then((products) => {
+        const productSection = document.querySelector('.items');
+        for (let i = 0; i < products.length; i++) {
+            let productCard = `
+                <a href="./product.html?id=${products[i]._id}">
+                    <article>
+                        <img src="${products[i].imageUrl}" alt="${products[i].altTxt}"/>
+                        <h3 class="productName">${products[i].name}</h3>
+                        <p class="${products[i].productDescription}">Dis enim malesuada risus sapien gravida nulla nisl arcu. Dis enim malesuada risus sapien gravida nulla nisl arcu.</p>
+                    </article>
+                </a>`;
+                productSection.innerHTML += productCard;
+        }
+    });
