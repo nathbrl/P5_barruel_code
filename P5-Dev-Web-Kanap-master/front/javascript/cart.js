@@ -8,7 +8,7 @@ let totalArticle = [];
 let totalOrder = [];
 
 /**
- * Mise à jour le LocaStorage au moindre changement dans le panier
+ * Mise à jour du LocaStorage au moindre changement dans le panier
  * @cartItems: array qui contient une liste d'objets (produits)
  */
 function updateCart(cartItems) {
@@ -81,15 +81,7 @@ if (cartItems !== null) {
                         cartItems.splice(i, 1);
                         updateCart(cartItems);
                     }
-                })
-                /*if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
-                    && item.currentProductId === cartItems[i].currentProductId)) {
-                    button.addEventListener('click', () => {
-                        console.log("button event ok");
-                        cartItems.splice(i, 1);
-                        updateCart(cartItems);
-                    })
-                }*/
+                });
             })
         });
     });
@@ -100,80 +92,66 @@ if (cartItems !== null) {
     const city = document.querySelector("#city");
     const email = document.querySelector("#email");
 
-    function checkFirstName() {
-        firstName.addEventListener('change', e => {
-            if (!firstName.value.match(regexForName)) {
-                firstNameErrorMsg.innerHTML = "le champ prénom contient des erreurs";
-                firstName.style.border = 'solid 2px red';
-                firstNameErrorMsg.style.color = '#fbbcbc';
-            } else if (firstName.value.match(regexForName)) {
-                firstName.style.border = 'solid 2px #D5FCB4';
-                firstNameErrorMsg.style.color = '#D5FCB4';
-                firstNameErrorMsg.innerHTML = "ok";
-            }
-        });
-    }
-    checkFirstName();
+    
+    firstName.addEventListener('change', e => {
+        if (!firstName.value.match(regexForName)) {
+            firstNameErrorMsg.innerHTML = "le champ prénom contient des erreurs";
+            firstName.style.border = 'solid 2px red';
+            firstNameErrorMsg.style.color = '#fbbcbc';
+        } else if (firstName.value.match(regexForName)) {
+            firstName.style.border = 'solid 2px #D5FCB4';
+            firstNameErrorMsg.style.color = '#D5FCB4';
+            firstNameErrorMsg.innerHTML = "ok";
+        }
+    });
 
-    function checkLastName() {
-        lastName.addEventListener('change', e => {
-            if (!lastName.value.match(regexForName)) {
-                lastNameErrorMsg.innerText = "le champ nom contient des erreurs";
-                lastName.style.border = 'solid 2px red';
-                lastNameErrorMsg.style.color = '#fbbcbc';
-            } else if (lastName.value.match(regexForName)) {
-                lastName.style.border = 'solid 2px #D5FCB4';
-                lastNameErrorMsg.style.color = '#D5FCB4';
-                lastNameErrorMsg.innerText = "ok";
-            }
-        });
-    }
-    checkLastName();
+    lastName.addEventListener('change', e => {
+        if (!lastName.value.match(regexForName)) {
+            lastNameErrorMsg.innerText = "le champ nom contient des erreurs";
+            lastName.style.border = 'solid 2px red';
+            lastNameErrorMsg.style.color = '#fbbcbc';
+        } else if (lastName.value.match(regexForName)) {
+            lastName.style.border = 'solid 2px #D5FCB4';
+            lastNameErrorMsg.style.color = '#D5FCB4';
+            lastNameErrorMsg.innerText = "ok";
+        }
+    });
 
-    function checkAddress() {
-        address.addEventListener('change', e => {
-            if (!address.value.match(regexForAddress)) {
-                addressErrorMsg.innerHTML = "le champ addresse contient des erreurs";
-                address.style.border = 'solid 2px red';
-                addressErrorMsg.style.color = '#fbbcbc';
-            } else if (address.value.match(regexForAddress)) {
-                address.style.border = 'solid 2px #D5FCB4';
-                addressErrorMsg.style.color = '#D5FCB4';
-                addressErrorMsg.innerHTML = "ok";
-            }
-        });
-    }
-    checkAddress();
+    address.addEventListener('change', e => {
+        if (!address.value.match(regexForAddress)) {
+            addressErrorMsg.innerHTML = "le champ addresse contient des erreurs";
+            address.style.border = 'solid 2px red';
+            addressErrorMsg.style.color = '#fbbcbc';
+        } else if (address.value.match(regexForAddress)) {
+            address.style.border = 'solid 2px #D5FCB4';
+            addressErrorMsg.style.color = '#D5FCB4';
+            addressErrorMsg.innerHTML = "ok";
+        }
+    });
 
-    function checkCity() {
-        city.addEventListener('change', e => {
-            if (!city.value.match(regexForName)) {
-                cityErrorMsg.innerHTML = "le champ ville contient des erreurs";
-                city.style.border = 'solid 2px red';
-                cityErrorMsg.style.color = '#fbbcbc';
-            } else if (city.value.match(regexForName)) {
-                city.style.border = 'solid 2px #D5FCB4';
-                cityErrorMsg.style.color = '#D5FCB4';
-                cityErrorMsg.innerHTML = "ok";
-            }
-        });
-    }
-    checkCity();
+    city.addEventListener('change', e => {
+        if (!city.value.match(regexForName)) {
+            cityErrorMsg.innerHTML = "le champ ville contient des erreurs";
+            city.style.border = 'solid 2px red';
+            cityErrorMsg.style.color = '#fbbcbc';
+        } else if (city.value.match(regexForName)) {
+            city.style.border = 'solid 2px #D5FCB4';
+            cityErrorMsg.style.color = '#D5FCB4';
+            cityErrorMsg.innerHTML = "ok";
+        }
+    });
 
-    function checkEmail() {
-        email.addEventListener('change', e => {
-            if (!email.value.match(regexForEmail)) {
-                emailErrorMsg.innerHTML = "le champ email contient des erreurs";
-                email.style.border = 'solid 2px red';
-                emailErrorMsg.style.color = '#fbbcbc';
-            } else if (email.value.match(regexForEmail)) {
-                email.style.border = 'solid 2px #D5FCB4';
-                emailErrorMsg.style.color = '#D5FCB4';
-                emailErrorMsg.innerHTML = "ok";
-            }
-        });
-    }
-    checkEmail();
+    email.addEventListener('change', e => {
+        if (!email.value.match(regexForEmail)) {
+            emailErrorMsg.innerHTML = "le champ email contient des erreurs";
+            email.style.border = 'solid 2px red';
+            emailErrorMsg.style.color = '#fbbcbc';
+        } else if (email.value.match(regexForEmail)) {
+            email.style.border = 'solid 2px #D5FCB4';
+            emailErrorMsg.style.color = '#D5FCB4';
+            emailErrorMsg.innerHTML = "ok";
+        }
+    });
 
     const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
     const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
@@ -185,6 +163,11 @@ if (cartItems !== null) {
     const regexForAddress = /^([0-9]{1,3}(([,. ]?){1}[a-zA-Zàâäéèêëïîôöùûüç' ]+))$/;
     const regexForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+    /**
+     * double vérification des données champs du formulaire
+     * si toutes les données sont correctes le formulaire est envoyé
+     * sinon la commande ne peut être passée
+     */
     function checkFormValidity() {
         cartFormOrder.addEventListener("submit", (e) => {
             e.preventDefault();
@@ -193,10 +176,8 @@ if (cartItems !== null) {
                 !address.value.match(regexForAddress) ||
                 !lastName.value.match(regexForName) ||
                 !firstName.value.match(regexForName)) {
-                console.log('le form ne sera pas envoyé');
             } else{
                 sendOrder();
-                console.log('le form a été envoyé');
             }
         });
     }
@@ -205,7 +186,11 @@ if (cartItems !== null) {
     const products = Object.values(cartItems).map((product) => {
         return product.currentProductId;
     });
-
+    /**
+     * envoie au serveur les données du formulaire plus le contenu du panier
+     * une fois la commande passé l'utilisateur est redirigé vers la page de confirmation
+     * le serveur renvoie le numéro de commande
+     */
     function sendOrder() {
         const firstNameValue = document.querySelector("#firstName").value;
         console.log(firstNameValue);

@@ -1,8 +1,7 @@
 /**
- * 1) Je récupère les produits de l'api grace au fetch
- * 2) Je log la réponse puis je chaine une autre promesse en demandant l'array des produits
- * 3) Je boucle à travers mon array afin de générer une carte
- * 4) Enfin, j'affiche les détail des chaque produits
+ * 1) récupère les produits de l'api grace au fetch
+ * 2) boucle à travers l'array des produits afin de générer une carte pour chaque article
+ * 3) Enfin, affiche les détail des chaque produits
  */
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
