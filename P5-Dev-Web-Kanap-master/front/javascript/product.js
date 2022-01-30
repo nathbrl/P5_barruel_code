@@ -45,25 +45,25 @@ fetch(`http://localhost:3000/api/products/${productId}`)
             selectOptions.add(colorOption);
         });
         addProductToCart(sofa);
-        //optionColor(sofa);
     });
-
 
 const cart = JSON.parse(localStorage.getItem('products')) || [];
 const addToCartButton = document.querySelector('#addToCart');
 const select = document.querySelector('#colors');
-const quantity = document.querySelector('input#quantity');
+const quantity = document.querySelector('#quantity');
 
 function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
     const productAltTxt = sofa.altTxt;
     const productName = sofa.name;
+
     let selectedColor = select.addEventListener('change', (e) => {
         selectedColor = e.target.value;
     });
     let selectedQuantity = quantity.addEventListener('change', (e) => {
         selectedQuantity = parseInt(e.target.value);
     });
+
     addToCartButton.addEventListener('click', () => {
         let currentProduct = {
             currentProductId: productId,

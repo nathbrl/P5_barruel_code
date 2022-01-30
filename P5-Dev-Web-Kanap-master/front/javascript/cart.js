@@ -193,7 +193,6 @@ if (cartItems !== null) {
      */
     function sendOrder() {
         const firstNameValue = document.querySelector("#firstName").value;
-        console.log(firstNameValue);
         const lastNameValue = document.querySelector("#lastName").value;
         const addressValue = document.querySelector("#address").value;
         const cityValue = document.querySelector("#city").value;
@@ -220,7 +219,6 @@ if (cartItems !== null) {
         .then((res) => res.json())
         .then (data => {
             const orderID = data.orderId;
-            console.log(orderID);
             window.location = `confirmation.html?orderId=${orderID}`
         })
     }
