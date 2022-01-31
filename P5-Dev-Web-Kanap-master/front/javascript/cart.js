@@ -25,17 +25,16 @@ if (cartItems !== null) {
         fetch('http://localhost:3000/api/products/'+`${productLS.currentProductId}`)
         .then((res) => res.json())
         .then((productAPi) => {
-            
             let article = document.createElement('article');
             article.classList.add('cart__item');
-            article.setAttribute('data-id', '{product-ID}');
+            article.setAttribute('data-id', `${productLS.currentProductId}`);
             sectionProduct.appendChild(article);
             let divImg = document.createElement('div');
             divImg.classList.add('cart__item__img');
             article.appendChild(divImg);
             let img = document.createElement('img');
-            img.setAttribute('src', "../images/logo.png");
-            img.setAttribute('alt', "Photographie d'un canapé");
+            img.setAttribute('src', `${productAPi.imageUrl}`);
+            img.setAttribute('alt', `${productAPi.altTxt}`);
             divImg.appendChild(img);
             let divContent = document.createElement('div');
             divContent.classList.add('cart__item__content');
@@ -45,15 +44,21 @@ if (cartItems !== null) {
             divContent.appendChild(divTitlePrice);
             let title = document.createElement('h2');
             divTitlePrice.appendChild(title);
+            title.innerHTML = `${productAPi.name}`;
+            let color = document.createElement('p');
+            color.innerHTML = `${productLS.productSelectedColor}`
+            divTitlePrice.appendChild(color)
             let price = document.createElement('p');
+            price.innerHTML = `${productAPi.price} €`
             divTitlePrice.appendChild(price);
             let divContentSettings = document.createElement('div');
-            divContent.classList.add('cart__item__content__settings');
+            divContentSettings.classList.add('cart__item__content__settings');
             divContent.appendChild(divContentSettings);
             let divSettingsQty = document.createElement('div');
             divSettingsQty.classList.add('cart__item__content__settings__quantity');
-            divContent.appendChild(divSettingsQty);
+            divContentSettings.appendChild(divSettingsQty);
             let pQty = document.createElement('p');
+            pQty.innerHTML = 'Qté :';
             divSettingsQty.appendChild(pQty);
             let inputQty = document.createElement('input');
             inputQty.classList.add('itemQuantity');
@@ -62,45 +67,16 @@ if (cartItems !== null) {
             inputQty.setAttribute('min', '1');
             inputQty.setAttribute('max', '100');
             inputQty.setAttribute('value', '42');
+            inputQty.value = `${productLS.productSelectedQuantity}`;
             divSettingsQty.appendChild(inputQty);
             let divSettingsDelete = document.createElement('div');
             divSettingsDelete.classList.add('cart__item__content__settings__delete');
-            divContent.appendChild(divSettingsDelete);
+            divContentSettings.appendChild(divSettingsDelete);
             let deleteText = document.createElement('p');
             deleteText.classList.add('deleteItem');
-            divSettingsDelete.appendChild(deleteText);
-            img.src = `${productAPi.imageUrl}`;
-            img.alt = `${productAPi.altTxt}`
-            title.innerHTML = `${productAPi.name}`;
-            price.innerHTML = `${productAPi.price}`
-            pQty.innerHTML = 'Qté :';
-            inputQty.value = `${productLS.productSelectedQuantity}`;
             deleteText.innerHTML = 'supprimer';
-            /*
-            sectionProduct.innerHTML += `
-                <article class="cart__item" data-id=${productAPi.productId}>
-                    <div class="cart__item__img">
-                        <img src=${productAPi.imageUrl} alt=${productAPi.altTxt}>
-                    </div>
-                    <div class="cart__item__content">
-                        <div class="cart__item__content__titlePrice">
-                            <h2>${productAPi.name}</h2>
-                            <p>${productAPi.price}€</p>
-                            <p>${productLS.productSelectedColor}</p>
-                        </div>
-                        <div class="cart__item__content__settings">
-                            <div class="cart__item__content__settings__quantity">
-                                <p>Qté : </p>
-                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100"
-                                value="${productLS.productSelectedQuantity}">
-                            </div>
-                        </div>
-                        <div class="cart__item__content__settings__delete">
-                            <p class="deleteItem">Supprimer</p>
-                        </div>
-                    </div>
-                </article>
-            `;*/
+            divSettingsDelete.appendChild(deleteText);
+            
             const changeQuantity = document.querySelectorAll('.itemQuantity');
             changeQuantity.forEach((input, i) => {
                 input.addEventListener('change', (e) => {
@@ -124,13 +100,14 @@ if (cartItems !== null) {
             }    
             totalQuantity.innerHTML = sumArticles + ' ';
 
-            const suppressButtons = document.querySelectorAll('.deleteItem');
+            const suppressButtons = document.querySelectorAll('p.deleteItem');
             suppressButtons.forEach((button, i) => {
                 button.addEventListener('click', () => {
-                    if (cartItems.filter(item => item.productSelectedColor === cartItems[i].productSelectedColor 
-                        && item.currentProductId === cartItems[i].currentProductId)) {
-                        cartItems.splice(i, 1);
-                        updateCart(cartItems);
+                    let sameItem = cartItems.filter(item => item.productSelectedColor === cartItems[i.productSelectedColor]
+                        && item.currentProductId === cartItems[i].currentProductId);
+                    if (sameItem) {
+                            cartItems.splice(i, 1);
+                            updateCart(cartItems);
                     }
                 });
             })

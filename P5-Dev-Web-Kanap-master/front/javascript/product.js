@@ -56,6 +56,10 @@ const select = document.querySelector('#colors');
 const quantity = document.querySelector('#quantity');
 let notification = document.querySelector(".item__content__addButton");
 
+/**
+ * affiche une notification d'erreur selon l'action de l'utilisateur
+ * supprime le message après un certain délais
+ */
 let deleteNotification = () => {
     let notificationMessage = document.querySelector('#message')
     setTimeout(function () {
@@ -63,6 +67,11 @@ let deleteNotification = () => {
     }, 2000)
 }
 
+/**
+ * ajoute un produit au panier au click sur le bouton 'ajouter au panier'
+ * @sofa: article unique qu'on ajoute à partir de la page produit
+ * stock le produit ajouté dans le localstorage avec les détails nécessaires
+ */
 function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
     const productAltTxt = sofa.altTxt;
