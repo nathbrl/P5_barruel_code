@@ -3,19 +3,31 @@
  * 2) boucle à travers l'array des produits afin de générer une carte pour chaque article
  * 3) Enfin, affiche les détail des chaque produits
  */
+
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
-    .then((products) => {
+    .then((products) => products.forEach(product => {
         const productSection = document.querySelector('.items');
-        for (let i = 0; i < products.length; i++) {
-            let productCard = `
-                <a href="./product.html?id=${products[i]._id}">
-                    <article>
-                        <img src="${products[i].imageUrl}" alt="${products[i].altTxt}"/>
-                        <h3 class="productName">${products[i].name}</h3>
-                        <p class="${products[i].productDescription}">Dis enim malesuada risus sapien gravida nulla nisl arcu. Dis enim malesuada risus sapien gravida nulla nisl arcu.</p>
-                    </article>
-                </a>`;
-                productSection.innerHTML += productCard;
-        }
+        let cardlink = document.createElement('a');
+        cardlink.setAttribute('href', "");
+        productSection.appendChild(cardlink);
+        let article = document.createElement('article');
+        cardlink.appendChild(article);
+        let image = document.createElement('img');
+        image.setAttribute('src', 'alt');
+        article.appendChild(image);
+        let title = document.createElement('h3');
+        title.classList.add('productName');
+        article.appendChild(title);
+        let description = document.createElement('p');
+        description.classList.add('productDescription');
+        article.appendChild(description);
+        cardlink.href = `./product.html?id=${product._id}`;
+        image.src = `${product.imageUrl}`;
+        image.alt = `${product.altTxt}`;
+        title.innerHTML = `${product.name}`;
+        description.innerHTML = `${product.description}`
+    }))
+    .catch(error => {
+        console.log(error);
     });

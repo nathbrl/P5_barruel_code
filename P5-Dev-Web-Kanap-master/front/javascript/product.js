@@ -14,7 +14,10 @@ getProductUrl();
 
 const productId = getProductUrl();
 
-let img = document.querySelector('.item__img img');
+let divImg = document.querySelector('.item__img');
+let img = document.createElement('img');
+divImg.appendChild(img);
+
 let price = document.querySelector('#price');
 let description = document.querySelector('#description');
 let productName = document.querySelector('#title');
@@ -23,7 +26,7 @@ const selectOptions = document.querySelector('select').options;
 selectOptions.add(optionText)
     optionText.setAttribute('disabled', 'disabled');
     optionText.setAttribute('selected', 'true');
-    optionText.textContent = 'SVP choisissez une couleur';
+    optionText.textContent = '--SVP choisissez une couleur--';
 
 /**
  * 1) récupère les données de l'APi mais pour un produit uniquement grace à son id unique
@@ -51,6 +54,14 @@ const cart = JSON.parse(localStorage.getItem('products')) || [];
 const addToCartButton = document.querySelector('#addToCart');
 const select = document.querySelector('#colors');
 const quantity = document.querySelector('#quantity');
+let notification = document.querySelector(".item__content__addButton");
+
+let deleteNotification = () => {
+    let notificationMessage = document.querySelector('#message')
+    setTimeout(function () {
+        notificationMessage.remove()
+    }, 2000)
+}
 
 function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
@@ -65,28 +76,33 @@ function addProductToCart(sofa) {
     });
 
     addToCartButton.addEventListener('click', () => {
-        let currentProduct = {
-            currentProductId: productId,
-            productSelectedColor: selectedColor,
-            productSelectedQuantity: selectedQuantity,
-            productName: productName,
-            productImage: productImage,
-            altTxt: productAltTxt,
+        if (quantity.value <= 0 || quantity.value > 100 || select.value == '' ) {
+            notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Merci de saisir une quantité valide (entre 1-100) ainsi qu\'une couleur</span>');
+            deleteNotification();
+        }else {
+            let currentProduct = {
+                currentProductId: productId,
+                productSelectedColor: selectedColor,
+                productSelectedQuantity: selectedQuantity,
+                productName: productName,
+                productImage: productImage,
+                altTxt: productAltTxt,
+            }
+            let sameItem = cart.find(item => item.productSelectedColor === selectedColor
+                && item.currentProductId === productId);
+    
+            if (sameItem) {
+                sameItem.productSelectedQuantity += selectedQuantity;
+                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>La quantité a bien été modifiée</span>');
+                deleteNotification();
+            } else {
+                currentProduct.productSelectedQuantity = selectedQuantity;
+                cart.push(currentProduct);
+                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Le produit a bien été ajouté au panier !</span>');
+                deleteNotification();
+            }
+            localStorage.setItem('products', JSON.stringify(cart));
         }
-        if (cart.some(item => item.productSelectedColor === selectedColor 
-            && item.currentProductId === productId)) {
-            currentProduct.productSelectedQuantity += selectedQuantity;
-            cart.forEach((item) => {
-                if (item.productSelectedColor === selectedColor 
-                    && item.currentProductId === productId) {
-                        item.productSelectedQuantity += selectedQuantity;
-                }
-            });
-        } else {
-            currentProduct.productSelectedQuantity = selectedQuantity;
-            cart.push(currentProduct);
-        }
-        localStorage.setItem('products', JSON.stringify(cart));
+        
     });
 }
-

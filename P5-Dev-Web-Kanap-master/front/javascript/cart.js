@@ -1,5 +1,4 @@
-const productId = localStorage.getItem('products.currentProductId');
-let divProduct = document.querySelector("#cart__items");
+let sectionProduct = document.querySelector("#cart__items");
 let cartItems = JSON.parse(localStorage.getItem('products'));
 let cartFormOrder = document.querySelector('.cart__order__form');
 let totalPrice = document.querySelector('#totalPrice');
@@ -21,12 +20,64 @@ function updateCart(cartItems) {
 }
 
 if (cartItems !== null) {
-    divProduct.innerHTML = "";
+    sectionProduct.innerHTML = "";
     cartItems.forEach((productLS) => {
         fetch('http://localhost:3000/api/products/'+`${productLS.currentProductId}`)
         .then((res) => res.json())
         .then((productAPi) => {
-            divProduct.innerHTML += `
+            
+            let article = document.createElement('article');
+            article.classList.add('cart__item');
+            article.setAttribute('data-id', '{product-ID}');
+            sectionProduct.appendChild(article);
+            let divImg = document.createElement('div');
+            divImg.classList.add('cart__item__img');
+            article.appendChild(divImg);
+            let img = document.createElement('img');
+            img.setAttribute('src', "../images/logo.png");
+            img.setAttribute('alt', "Photographie d'un canapé");
+            divImg.appendChild(img);
+            let divContent = document.createElement('div');
+            divContent.classList.add('cart__item__content');
+            article.appendChild(divContent);
+            let divTitlePrice = document.createElement('div');
+            divTitlePrice.classList.add('cart__item__content__titlePrice');
+            divContent.appendChild(divTitlePrice);
+            let title = document.createElement('h2');
+            divTitlePrice.appendChild(title);
+            let price = document.createElement('p');
+            divTitlePrice.appendChild(price);
+            let divContentSettings = document.createElement('div');
+            divContent.classList.add('cart__item__content__settings');
+            divContent.appendChild(divContentSettings);
+            let divSettingsQty = document.createElement('div');
+            divSettingsQty.classList.add('cart__item__content__settings__quantity');
+            divContent.appendChild(divSettingsQty);
+            let pQty = document.createElement('p');
+            divSettingsQty.appendChild(pQty);
+            let inputQty = document.createElement('input');
+            inputQty.classList.add('itemQuantity');
+            inputQty.setAttribute('type', 'number');
+            inputQty.setAttribute('name', 'itemQuantity');
+            inputQty.setAttribute('min', '1');
+            inputQty.setAttribute('max', '100');
+            inputQty.setAttribute('value', '42');
+            divSettingsQty.appendChild(inputQty);
+            let divSettingsDelete = document.createElement('div');
+            divSettingsDelete.classList.add('cart__item__content__settings__delete');
+            divContent.appendChild(divSettingsDelete);
+            let deleteText = document.createElement('p');
+            deleteText.classList.add('deleteItem');
+            divSettingsDelete.appendChild(deleteText);
+            img.src = `${productAPi.imageUrl}`;
+            img.alt = `${productAPi.altTxt}`
+            title.innerHTML = `${productAPi.name}`;
+            price.innerHTML = `${productAPi.price}`
+            pQty.innerHTML = 'Qté :';
+            inputQty.value = `${productLS.productSelectedQuantity}`;
+            deleteText.innerHTML = 'supprimer';
+            /*
+            sectionProduct.innerHTML += `
                 <article class="cart__item" data-id=${productAPi.productId}>
                     <div class="cart__item__img">
                         <img src=${productAPi.imageUrl} alt=${productAPi.altTxt}>
@@ -49,7 +100,7 @@ if (cartItems !== null) {
                         </div>
                     </div>
                 </article>
-            `;
+            `;*/
             const changeQuantity = document.querySelectorAll('.itemQuantity');
             changeQuantity.forEach((input, i) => {
                 input.addEventListener('change', (e) => {
@@ -64,7 +115,7 @@ if (cartItems !== null) {
             for (let i = 0; i < totalOrder.length; i++) {
                 sumOrder += totalOrder[i];
             }
-            totalPrice.innerHTML = sumOrder; 
+            totalPrice.innerHTML = sumOrder.toString(); 
 
             totalArticle.push(productLS.productSelectedQuantity);
             let sumArticles = 0;
@@ -224,7 +275,7 @@ if (cartItems !== null) {
     }
 }else{
     cartFormOrder.style = 'display: none';
-    divProduct.innerHTML = '<h2 id="title"> Votre panier est vide ! </h2>';
+    sectionProduct.innerHTML = '<h2 id="title"> Votre panier est vide ! </h2>';
     let title = document.getElementById('title');
     title.style.textAlign = "center";
 }
