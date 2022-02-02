@@ -1,8 +1,8 @@
 /**
  * 1) récupère l'url de la page où je suis actuellement
- * 2) créer un nouvel objet url à partir de l'url où je suis actuellement
- * 3) à travers le searchParams la fonction récupère l'id 
- * pour chaque produit pour ensuite afficher ses détails propres
+ * 2) créer un nouvel objet url à partir de l'url actuelle
+ * 3) à travers le searchParams récupère l'id 
+ * pour chaque produit pour ensuite afficher ses détails
  */
 function getProductUrl() {
     const urlLoc = window.location.href;
@@ -12,21 +12,21 @@ function getProductUrl() {
 }
 getProductUrl();
 
+//stockage de la fontion dans une variable
 const productId = getProductUrl();
 
 let divImg = document.querySelector('.item__img');
 let img = document.createElement('img');
 divImg.appendChild(img);
-
 let price = document.querySelector('#price');
 let description = document.querySelector('#description');
 let productName = document.querySelector('#title');
 const optionText = document.createElement('option');
 const selectOptions = document.querySelector('select').options;
-selectOptions.add(optionText)
-    optionText.setAttribute('disabled', 'disabled');
-    optionText.setAttribute('selected', 'true');
-    optionText.textContent = '--SVP choisissez une couleur--';
+selectOptions.add(optionText);
+optionText.setAttribute('disabled', 'disabled');
+optionText.setAttribute('selected', 'true');
+optionText.textContent = '--SVP choisissez une couleur--';
 
 /**
  * 1) récupère les données de l'APi mais pour un produit uniquement grace à son id unique
@@ -48,6 +48,9 @@ fetch(`http://localhost:3000/api/products/${productId}`)
             selectOptions.add(colorOption);
         });
         addProductToCart(sofa);
+    })
+    .catch(error => {
+        console.log(error);
     });
 
 const cart = JSON.parse(localStorage.getItem('products')) || [];
@@ -72,6 +75,7 @@ let deleteNotification = () => {
  * @sofa: article unique qu'on ajoute à partir de la page produit
  * stock le produit ajouté dans le localstorage avec les détails nécessaires
  */
+
 function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
     const productAltTxt = sofa.altTxt;
@@ -97,6 +101,7 @@ function addProductToCart(sofa) {
                 productImage: productImage,
                 altTxt: productAltTxt,
             }
+            
             let sameItem = cart.find(item => item.productSelectedColor === selectedColor
                 && item.currentProductId === productId);
     
@@ -112,6 +117,5 @@ function addProductToCart(sofa) {
             }
             localStorage.setItem('products', JSON.stringify(cart));
         }
-        
     });
 }

@@ -10,89 +10,50 @@ let totalOrder = [];
  * Mise à jour du LocaStorage au moindre changement dans le panier
  * @cartItems: array qui contient une liste d'objets (produits)
  */
- function updateCart(cartItem) {
-   if (cartItems.length === 0) {
-       //localStorage.removeItem('products');
-       alert('ok')
-   } else {
-       //localStorage.setItem('products', JSON.stringify(cartItem));
-       alert('else ok')
-   }
-   //window.location.href = 'cart.html';
+function updateCart(cartItem) {
+    if (cartItems.length === 0) {
+        localStorage.removeItem('products');
+    }else {
+        localStorage.setItem('products', JSON.stringify(cartItem));
+    }
+    window.location.href = 'cart.html';
 }
-
+/**
+ * condition globale pour afficher tous les détails du panier si celui-ci existe(
+ * donc: liste des produits, affichages des totaux, vérification des données de formulaire)
+ * sinon le formulaire est caché et un message 'panier vide s'affiche'
+*/
 if (cartItems !== null) {
+    productSection.innerHTML = '';
     cartItems.forEach((productLS) => {
         fetch('http://localhost:3000/api/products/'+`${productLS.currentProductId}`)
         .then((res) => res.json())
         .then((productAPi) => {
-            //article
-            let article = document.createElement('article');
-            article.classList.add('cart__item');
-            article.setAttribute('data-id', `${productLS.currentProductId}`);
-            article.setAttribute('data-color', `${productLS.productSelectedColor}`);
-            productSection.appendChild(article);
-            //divImg
-            let divImg = document.createElement('div');
-            divImg.classList.add('cart__item__img');
-            article.appendChild(divImg);
-            //img
-            let img = document.createElement('img');
-            img.setAttribute('src', `${productAPi.imageUrl}`);
-            img.setAttribute('alt', `${productAPi.altTxt}`);
-            divImg.appendChild(img);
-            //divContent
-            let divContent = document.createElement('div');
-            divContent.classList.add('cart__item__content');
-            article.appendChild(divContent);
-            //divTitlePrice
-            let divTitlePrice = document.createElement('div');
-            divTitlePrice.classList.add('cart__item__content__titlePrice');
-            divContent.appendChild(divTitlePrice);
-            //h2
-            let name = document.createElement('h2');
-            name.innerHTML = `${productAPi.name}`;
-            divTitlePrice.appendChild(name);
-            //p color
-            let color = document.createElement('p');
-            color.innerHTML = `${productLS.productSelectedColor}`
-            divTitlePrice.appendChild(color)
-            //p price
-            let price = document.createElement('p');
-            price.innerHTML = `${productAPi.price} €`
-            divTitlePrice.appendChild(price);
-            //divContentSettings
-            let divContentSettings = document.createElement('div');
-            divContentSettings.classList.add('cart__item__content__settings');
-            divContent.appendChild(divContentSettings);
-            //divSettingsQty
-            let divSettingsQty = document.createElement('div');
-            divSettingsQty.classList.add('cart__item__content__settings__quantity');
-            divContentSettings.appendChild(divSettingsQty);
-            //p quantity
-            let pQty = document.createElement('p');
-            pQty.innerHTML = 'Qté :';
-            divSettingsQty.appendChild(pQty);
-            //input quantity
-            let inputQty = document.createElement('input');
-            inputQty.classList.add('itemQuantity');
-            inputQty.setAttribute('type', 'number');
-            inputQty.setAttribute('name', 'itemQuantity');
-            inputQty.setAttribute('min', '1');
-            inputQty.setAttribute('max', '100');
-            inputQty.setAttribute('value', '42');
-            inputQty.value = `${productLS.productSelectedQuantity}`;
-            divSettingsQty.appendChild(inputQty);
-            //divSettingsDelete
-            let divSettingsDelete = document.createElement('div');
-            divSettingsDelete.classList.add('cart__item__content__settings__delete');
-            divContentSettings.appendChild(divSettingsDelete);
-            //deleteItem
-            let deleteItem = document.createElement('p');
-            deleteItem.classList.add('deleteItem');
-            deleteItem.textContent = 'supprimer';
-            divSettingsDelete.appendChild(deleteItem);
-
+            productSection.innerHTML += `
+                <article class="cart__item" data-id=${productAPi.productId}>
+                    <div class="cart__item__img">
+                        <img src=${productAPi.imageUrl} alt=${productAPi.altTxt}>
+                    </div>
+                    <div class="cart__item__content">
+                        <div class="cart__item__content__titlePrice">
+                            <h2>${productAPi.name}</h2>
+                            <p>${productAPi.price}€</p>
+                            <p>${productLS.productSelectedColor}</p>
+                        </div>
+                        <div class="cart__item__content__settings">
+                            <div class="cart__item__content__settings__quantity">
+                                <p>Qté : </p>
+                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100"
+                                value="${productLS.productSelectedQuantity}">
+                            </div>
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                            <p class="deleteItem">Supprimer</p>
+                        </div>
+                    </div>
+                </article>
+            `;
+            //Changement de quantité
             const changeQuantity = document.querySelectorAll('.itemQuantity');
             changeQuantity.forEach((input, i) => {
                 input.addEventListener('change', (e) => {
@@ -101,104 +62,42 @@ if (cartItems !== null) {
                     updateCart(cartItems);
                 });
             })
-
+            //Calcul prix total
             totalOrder.push(productAPi.price * productLS.productSelectedQuantity);
             let sumOrder = 0;
             for (let i = 0; i < totalOrder.length; i++) {
                 sumOrder += totalOrder[i];
             }
             totalPrice.innerHTML = sumOrder.toString(); 
-
+            //Calcul articles total
             totalArticle.push(productLS.productSelectedQuantity);
             let sumArticles = 0;
             for (let j = 0; j < totalArticle.length; j++) {
                 sumArticles += totalArticle[j];
             }    
             totalQuantity.innerHTML = sumArticles + ' ';
-
+            //suppression article
+            const suppressButtons = document.querySelectorAll('.deleteItem');
+            suppressButtons.forEach((button, i) => { 
+                if (cartItems.find(item => item.productSelectedColor === cartItems[i].productSelectedColor 
+                && item.currentProductId === cartItems[i].currentProductId)) {
+                    button.addEventListener('click', () => {
+                        cartItems.splice(i, 1);
+                        updateCart(cartItems);
+                    });
+                }
+            });
         })
         .catch(error => {
             console.log(error);
         });
-        const suppressButtons = document.querySelectorAll('.deleteItem');
-        suppressButtons.forEach((button, i) => { 
-            if (cartItems.find(item => item.productSelectedColor === cartItems[i].productSelectedColor 
-            && item.currentProductId === cartItems[i].currentProductId)) {
-                button.addEventListener('click', () => {
-                    cartItems.splice(i, 1);
-                    updateCart(cartItems);
-                });
-            }
-        });
     });
-
     const firstName = document.querySelector("#firstName");
     const lastName = document.querySelector("#lastName");
     const address = document.querySelector("#address");
     const city = document.querySelector("#city");
     const email = document.querySelector("#email");
-
     
-    firstName.addEventListener('change', e => {
-        if (!firstName.value.match(regexForName)) {
-            firstNameErrorMsg.innerHTML = "le champ prénom contient des erreurs";
-            firstName.style.border = 'solid 2px red';
-            firstNameErrorMsg.style.color = '#fbbcbc';
-        } else if (firstName.value.match(regexForName)) {
-            firstName.style.border = 'solid 2px #D5FCB4';
-            firstNameErrorMsg.style.color = '#D5FCB4';
-            firstNameErrorMsg.innerHTML = "ok";
-        }
-    });
-
-    lastName.addEventListener('change', e => {
-        if (!lastName.value.match(regexForName)) {
-            lastNameErrorMsg.innerText = "le champ nom contient des erreurs";
-            lastName.style.border = 'solid 2px red';
-            lastNameErrorMsg.style.color = '#fbbcbc';
-        } else if (lastName.value.match(regexForName)) {
-            lastName.style.border = 'solid 2px #D5FCB4';
-            lastNameErrorMsg.style.color = '#D5FCB4';
-            lastNameErrorMsg.innerText = "ok";
-        }
-    });
-
-    address.addEventListener('change', e => {
-        if (!address.value.match(regexForAddress)) {
-            addressErrorMsg.innerHTML = "le champ addresse contient des erreurs";
-            address.style.border = 'solid 2px red';
-            addressErrorMsg.style.color = '#fbbcbc';
-        } else if (address.value.match(regexForAddress)) {
-            address.style.border = 'solid 2px #D5FCB4';
-            addressErrorMsg.style.color = '#D5FCB4';
-            addressErrorMsg.innerHTML = "ok";
-        }
-    });
-
-    city.addEventListener('change', e => {
-        if (!city.value.match(regexForName)) {
-            cityErrorMsg.innerHTML = "le champ ville contient des erreurs";
-            city.style.border = 'solid 2px red';
-            cityErrorMsg.style.color = '#fbbcbc';
-        } else if (city.value.match(regexForName)) {
-            city.style.border = 'solid 2px #D5FCB4';
-            cityErrorMsg.style.color = '#D5FCB4';
-            cityErrorMsg.innerHTML = "ok";
-        }
-    });
-
-    email.addEventListener('change', e => {
-        if (!email.value.match(regexForEmail)) {
-            emailErrorMsg.innerHTML = "le champ email contient des erreurs";
-            email.style.border = 'solid 2px red';
-            emailErrorMsg.style.color = '#fbbcbc';
-        } else if (email.value.match(regexForEmail)) {
-            email.style.border = 'solid 2px #D5FCB4';
-            emailErrorMsg.style.color = '#D5FCB4';
-            emailErrorMsg.innerHTML = "ok";
-        }
-    });
-
     const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
     const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
     const addressErrorMsg = document.getElementById('addressErrorMsg');
@@ -208,11 +107,72 @@ if (cartItems !== null) {
     const regexForName = /^([a-zA-Zàâäéèêëïîôöùûüç' ]+){3,20}$/;
     const regexForAddress = /^([0-9]{1,3}(([,. ]?){1}[a-zA-Zàâäéèêëïîôöùûüç' ]+))$/;
     const regexForEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    
+    //Vérification du champ prénom
+    firstName.addEventListener('change', e => {
+        if (!firstName.value.match(regexForName)) {
+            firstNameErrorMsg.innerHTML = "le champ prénom contient des erreurs";
+            firstName.style.border = 'solid 2px red';
+            firstNameErrorMsg.style.color = '#fbbcbc';
+        }else if (firstName.value.match(regexForName)) {
+            firstName.style.border = 'solid 2px #D5FCB4';
+            firstNameErrorMsg.style.color = '#D5FCB4';
+            firstNameErrorMsg.innerHTML = "ok";
+        }
+    });
+    //Vérification du champ nom
+    lastName.addEventListener('change', e => {
+        if (!lastName.value.match(regexForName)) {
+            lastNameErrorMsg.innerText = "le champ nom contient des erreurs";
+            lastName.style.border = 'solid 2px red';
+            lastNameErrorMsg.style.color = '#fbbcbc';
+        }else if (lastName.value.match(regexForName)) {
+            lastName.style.border = 'solid 2px #D5FCB4';
+            lastNameErrorMsg.style.color = '#D5FCB4';
+            lastNameErrorMsg.innerText = "ok";
+        }
+    });
+    //Vérification du champ adresse
+    address.addEventListener('change', e => {
+        if (!address.value.match(regexForAddress)) {
+            addressErrorMsg.innerHTML = "le champ addresse contient des erreurs";
+            address.style.border = 'solid 2px red';
+            addressErrorMsg.style.color = '#fbbcbc';
+        }else if (address.value.match(regexForAddress)) {
+            address.style.border = 'solid 2px #D5FCB4';
+            addressErrorMsg.style.color = '#D5FCB4';
+            addressErrorMsg.innerHTML = "ok";
+        }
+    });
+    //Vérification du champ ville
+    city.addEventListener('change', e => {
+        if (!city.value.match(regexForName)) {
+            cityErrorMsg.innerHTML = "le champ ville contient des erreurs";
+            city.style.border = 'solid 2px red';
+            cityErrorMsg.style.color = '#fbbcbc';
+        }else if (city.value.match(regexForName)) {
+            city.style.border = 'solid 2px #D5FCB4';
+            cityErrorMsg.style.color = '#D5FCB4';
+            cityErrorMsg.innerHTML = "ok";
+        }
+    });
+    //Vérification du champ e-mail
+    email.addEventListener('change', e => {
+        if (!email.value.match(regexForEmail)) {
+            emailErrorMsg.innerHTML = "le champ email contient des erreurs";
+            email.style.border = 'solid 2px red';
+            emailErrorMsg.style.color = '#fbbcbc';
+        }else if (email.value.match(regexForEmail)) {
+            email.style.border = 'solid 2px #D5FCB4';
+            emailErrorMsg.style.color = '#D5FCB4';
+            emailErrorMsg.innerHTML = "ok";
+        }
+    });
 
     /**
      * double vérification des données champs du formulaire
      * si toutes les données sont correctes le formulaire est envoyé
-     * sinon la commande ne peut être passée
+     * sinon la commande ne peut être passée et les données ne seront pas envoyées
      */
     function checkFormValidity() {
         cartFormOrder.addEventListener("submit", (e) => {
