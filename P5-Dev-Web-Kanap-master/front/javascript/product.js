@@ -89,7 +89,7 @@ function addProductToCart(sofa) {
     });
 
     addToCartButton.addEventListener('click', () => {
-        if (quantity.value <= 0 || quantity.value > 100 || select.value == '' ) {
+        if (quantity.value <= 0 || quantity.value > 100 || select.value !== selectedColor ) {
             notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Merci de saisir une quantité valide (entre 1-100) ainsi qu\'une couleur</span>');
             deleteNotification();
         }else {

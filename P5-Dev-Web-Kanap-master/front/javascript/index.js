@@ -13,7 +13,7 @@ fetch("http://localhost:3000/api/products")
                 <article>
                     <img src="${product.imageUrl}" alt="${product.altTxt}"/>
                     <h3 class="productName">${product.name}</h3>
-                    <p class="${product.productDescription}">Dis enim malesuada risus sapien gravida nulla nisl arcu. Dis enim malesuada risus sapien gravida nulla nisl arcu.</p>
+                    <p class="productDescription">${product.description}</p>
                 </article>
             </a>
         `

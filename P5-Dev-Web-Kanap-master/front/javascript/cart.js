@@ -16,7 +16,17 @@ function updateCart(cartItem) {
     }else {
         localStorage.setItem('products', JSON.stringify(cartItem));
     }
-    window.location.href = 'cart.html';
+    setTimeout(function(){window.location.href = 'cart.html'}, 2000);
+}
+/**
+ * affiche une notification d'erreur selon l'action de l'utilisateur
+ * supprime le message après un certain délais
+ */
+let deleteNotification = () => {
+    let notificationMessage = document.querySelector('#message')
+    setTimeout(function () {
+        notificationMessage.remove()
+    }, 3000)
 }
 /**
  * condition globale pour afficher tous les détails du panier si celui-ci existe(
@@ -54,14 +64,35 @@ if (cartItems !== null) {
                 </article>
             `;
             //Changement de quantité
-            const changeQuantity = document.querySelectorAll('.itemQuantity');
+            /*const changeQuantity = document.querySelectorAll('.itemQuantity');
+            
             changeQuantity.forEach((input, i) => {
                 input.addEventListener('change', (e) => {
                     const finalQuantity = parseInt(e.target.value);
                     cartItems[i].productSelectedQuantity = finalQuantity;
                     updateCart(cartItems);
                 });
-            })
+            })*/
+            const changeQuantity = document.querySelectorAll('.itemQuantity');
+            let notification = document.querySelectorAll('.cart__item__content__settings__quantity');
+            const regexQuantity = /^(100|[1-9][0-9]?)$/;
+
+            changeQuantity.forEach((input, i) => {
+                input.addEventListener('change', (e) => {
+                    if (input.value.match(regexQuantity)) {
+                        const finalQuantity = parseInt(e.target.value);
+                        cartItems[i].productSelectedQuantity = finalQuantity;
+                        updateCart(cartItems);
+                    }else{
+                        let myItem = cartItems.find(item => item.productSelectedColor === cartItems[i].productSelectedColor 
+                            && item.currentProductId === cartItems[i].currentProductId)
+                        if (myItem) {
+                            notification[i].insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Vous ne pouvez dépasser la quantité maximale qui est 100</span>');
+                            deleteNotification();
+                        }
+                    }
+                });
+            });
             //Calcul prix total
             totalOrder.push(productAPi.price * productLS.productSelectedQuantity);
             let sumOrder = 0;
