@@ -63,16 +63,6 @@ if (cartItems !== null) {
                     </div>
                 </article>
             `;
-            //Changement de quantité
-            /*const changeQuantity = document.querySelectorAll('.itemQuantity');
-            
-            changeQuantity.forEach((input, i) => {
-                input.addEventListener('change', (e) => {
-                    const finalQuantity = parseInt(e.target.value);
-                    cartItems[i].productSelectedQuantity = finalQuantity;
-                    updateCart(cartItems);
-                });
-            })*/
             const changeQuantity = document.querySelectorAll('.itemQuantity');
             let notification = document.querySelectorAll('.cart__item__content__settings__quantity');
             const regexQuantity = /^(100|[1-9][0-9]?)$/;
@@ -87,7 +77,7 @@ if (cartItems !== null) {
                         let myItem = cartItems.find(item => item.productSelectedColor === cartItems[i].productSelectedColor 
                             && item.currentProductId === cartItems[i].currentProductId)
                         if (myItem) {
-                            notification[i].insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Vous ne pouvez dépasser la quantité maximale qui est 100</span>');
+                            notification[i].insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>La quantité doit être comprise entre 1 et 100</span>');
                             deleteNotification();
                         }
                     }
