@@ -74,11 +74,17 @@ let deleteNotification = () => {
  * ajoute un produit au panier au click sur le bouton 'ajouter au panier'
  * @sofa: article unique qu'on ajoute à partir de la page produit
  * stock le produit ajouté dans le localstorage avec les détails nécessaires
- */
+ 
+if (sameItemQuantity !== regexQuantity){
+            selectedQuantity = parseInt(e.target.value);
+                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
+                deleteNotification();
+                setTimeout(function(){window.location.reload()}, 2000);
+        }
+        
+        */
 
-const regexQuantity = /^(100|[1-9][0-9]?)$/;
 let sameItemQuantity = cart.find(item => item.productSelectedQuantity);
-console.log(sameItemQuantity);
 
 function addProductToCart(sofa) {
     const productImage = sofa.imageUrl;
@@ -87,14 +93,6 @@ function addProductToCart(sofa) {
 
     let selectedColor = select.addEventListener('change', (e) => {
         selectedColor = e.target.value;
-    });
-    let selectedQuantity = quantity.addEventListener('change', (e) => {
-        if (sameItemQuantity !== regexQuantity){
-            selectedQuantity = parseInt(e.target.value);
-                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
-                deleteNotification();
-                setTimeout(function(){window.location.reload()}, 2000);
-        }
     });
 
     addToCartButton.addEventListener('click', () => {
@@ -108,22 +106,23 @@ function addProductToCart(sofa) {
             let currentProduct = {
                 currentProductId: productId,
                 productSelectedColor: selectedColor,
-                productSelectedQuantity: selectedQuantity,
+                productSelectedQuantity: parseInt(quantity.value),
                 productName: productName,
                 productImage: productImage,
                 altTxt: productAltTxt,
             }
-            if (sameItemQuantity !== regexQuantity && sameItemQuantity){
-                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
+            if (sameItem) {
+                sameItem.productSelectedQuantity += parseInt(quantity.value);
+                if (sameItem.productSelectedQuantity > 100) {
+                    notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
+                    setTimeout(function(){window.location.reload()}, 2000);
+                    return;
+                }else{
+                    notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>La quantité a bien été modifiée</span>');
+                }
                 deleteNotification();
-                setTimeout(function(){window.location.reload()}, 2000);
-            }else if (sameItem) {
-                sameItem.productSelectedQuantity += selectedQuantity;
-                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>La quantité a bien été modifiée</span>');
-                deleteNotification();
-                
             }else {
-                currentProduct.productSelectedQuantity = selectedQuantity;
+                currentProduct.productSelectedQuantity = parseInt(quantity.value);
                 cart.push(currentProduct);
                 notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Le produit a bien été ajouté au panier !</span>');
                 deleteNotification();
