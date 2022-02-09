@@ -74,15 +74,7 @@ let deleteNotification = () => {
  * ajoute un produit au panier au click sur le bouton 'ajouter au panier'
  * @sofa: article unique qu'on ajoute à partir de la page produit
  * stock le produit ajouté dans le localstorage avec les détails nécessaires
- 
-if (sameItemQuantity !== regexQuantity){
-            selectedQuantity = parseInt(e.target.value);
-                notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
-                deleteNotification();
-                setTimeout(function(){window.location.reload()}, 2000);
-        }
-        
-        */
+*/
 
 let sameItemQuantity = cart.find(item => item.productSelectedQuantity);
 
@@ -99,10 +91,14 @@ function addProductToCart(sofa) {
         let sameItem = cart.find(item => item.productSelectedColor === selectedColor
         && item.currentProductId === productId);
 
-        if (quantity.value <= 0 || quantity.value > 100 || select.value !== selectedColor ) {
-            notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Merci de saisir une quantité valide (entre 1-100) ainsi qu\'une couleur</span>');
+        if (quantity.value <= 0 || quantity.value > 100) {
+            notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Merci de saisir une quantité valide (entre 1-100)</span>');
             deleteNotification();
-        }else {
+            
+        }else if (select.value !== selectedColor) {
+            notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>Merci de sélectionner une couleur</span>');
+            deleteNotification();
+        }else{
             let currentProduct = {
                 currentProductId: productId,
                 productSelectedColor: selectedColor,
@@ -115,12 +111,12 @@ function addProductToCart(sofa) {
                 sameItem.productSelectedQuantity += parseInt(quantity.value);
                 if (sameItem.productSelectedQuantity > 100) {
                     notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>la quantité ne sera pas modifiée car vous avez dépassé la limite dans le panier</span>');
-                    setTimeout(function(){window.location.reload()}, 2000);
+                    deleteNotification();
                     return;
                 }else{
                     notification.insertAdjacentHTML('afterend', '<span id="message" style="text-align: center; font-weight: bold;"><br>La quantité a bien été modifiée</span>');
+                    deleteNotification();
                 }
-                deleteNotification();
             }else {
                 currentProduct.productSelectedQuantity = parseInt(quantity.value);
                 cart.push(currentProduct);
